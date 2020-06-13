@@ -22,6 +22,7 @@ jobs:
           npm i
           npm run build
           npm run pack
+          
       - name: Run Self
         uses: ./
         id: jest-coverage-commenter-action
