@@ -1,4 +1,4 @@
-import { error, warning, debug } from '@actions/core';
+import { error, warning, info } from '@actions/core';
 import { execSync as execSyncImport } from 'child_process';
 
 const A_BUNCH_OF_DASHES = '----------';
@@ -16,7 +16,7 @@ const runJest = (
             const codeCoverageLines = codeCoverage.split('\n');
 
             const formattedCoverage = removeNonMarkdownLines(codeCoverageLines);
-            debug(formattedCoverage);
+            info(formattedCoverage);
             return formattedCoverage;
         } catch (innerError) {
             warning(
