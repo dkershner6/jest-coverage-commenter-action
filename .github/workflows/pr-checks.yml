@@ -16,10 +16,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v1
+      - run: npm i
       - uses: ./
         id: "jest-coverage-commenter-action"
         with:
-          must_deny: "node_modules,lib/**/*"
+          github_token: "${{ secrets.GITHUB_TOKEN }}""
+          test_command: "npm run test:coverage"
   other-checks:
     runs-on: ubuntu-latest
     steps:
