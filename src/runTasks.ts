@@ -2,8 +2,7 @@ import { info, error, setFailed } from '@actions/core';
 import gatherAllInputs from './tasks/gatherAllInputs';
 import runJest from './tasks/runJest';
 import postComment from './tasks/postComment';
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-ignore
+
 import packageJson from '../package.json';
 
 const runTasks = async (
@@ -12,7 +11,7 @@ const runTasks = async (
     actuallyPostComment = true
 ): Promise<void> => {
     try {
-        info(`Jest Commenter version ${packageJson.version}`);
+        info(`Jest Coverage Commenter v${packageJson.version}`);
         const inputs = gatherAllInputs(getInputParam);
         if (!inputs) {
             return;
