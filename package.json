@@ -11,7 +11,7 @@
     "lint": "eslint src/**/*.ts",
     "pack": "ncc build",
     "test": "jest",
-    "test:coverage": "jest --coverage",
+    "test:coverage": "jest --coverage --changedSince=master",
     "all": "npm run build && npm run format && npm run lint && npm run pack && npm test"
   },
   "repository": {
