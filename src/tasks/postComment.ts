@@ -1,4 +1,4 @@
-import { error, setFailed } from '@actions/core';
+import { error, setFailed, info } from '@actions/core';
 import { getOctokit as getOctokitImport, context } from '@actions/github';
 import { Octokit } from '@octokit/core';
 
@@ -42,6 +42,7 @@ const postComment = async (
         ${commentToPost}`;
 
         if (existingComment) {
+            info(`Previous comment found: ${existingComment.comment_id}`);
             await github.issues.updateComment({
                 issue_number: prNumber,
                 comment_id: existingComment.comment_id,
@@ -50,6 +51,7 @@ const postComment = async (
                 body: commentBody,
             });
         } else {
+            info('Creating new comment');
             await github.issues.createComment({
                 issue_number: prNumber,
                 repo,
