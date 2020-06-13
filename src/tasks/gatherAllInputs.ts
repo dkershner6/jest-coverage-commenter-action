@@ -1,4 +1,9 @@
-import { getInput, debug, setFailed, error } from '@actions/core';
+import {
+    getInput as getInputImport,
+    debug,
+    setFailed,
+    error,
+} from '@actions/core';
 
 export interface IInputs {
     githubToken: string;
@@ -10,21 +15,20 @@ export const NO_TOKEN_FAIL_MESSAGE =
 export const DEFAULT_TEST_COMMAND =
     'npx jest --coverage --noChangesSince=master';
 
-const gatherAllInputs = (inputs?: {
-    [key: string]: string;
-}): IInputs | void => {
+const gatherAllInputs = (
+    getInputParam: (key: string) => string
+): IInputs | void => {
     try {
-        const githubToken = determineValue([
-            inputs?.github_token,
-            getInput('github_token'),
-        ]);
+        const getInput = getInputParam ?? getInputImport;
+
+        const githubToken = determineValue([getInput('github_token')]);
         debug(`Input - github_token: ${githubToken}`);
         if (!githubToken) {
             return setFailed(NO_TOKEN_FAIL_MESSAGE);
         }
 
         const testCommand = determineValue(
-            [inputs?.test_command, getInput('test_command')],
+            [getInput('test_command')],
             DEFAULT_TEST_COMMAND
         );
         debug(`Input - test_command: ${testCommand}`);

@@ -4,12 +4,12 @@ import runJest from './tasks/runJest';
 import postComment from './tasks/postComment';
 
 const runTasks = async (
-    inputsParam?: { [key: string]: string },
+    getInputParam?: (key: string) => string,
     execSyncParam?: (command: string) => Buffer,
     actuallyPostComment = true
 ): Promise<void> => {
     try {
-        const inputs = gatherAllInputs(inputsParam);
+        const inputs = gatherAllInputs(getInputParam);
         if (!inputs) {
             return;
         }
