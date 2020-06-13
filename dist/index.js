@@ -40,7 +40,7 @@ module.exports =
 /******/ 	// the startup function
 /******/ 	function startup() {
 /******/ 		// Load entry module and return exports
-/******/ 		return __webpack_require__(198);
+/******/ 		return __webpack_require__(51);
 /******/ 	};
 /******/
 /******/ 	// run startup
@@ -386,6 +386,34 @@ module.exports = windowsRelease;
 
 /***/ }),
 
+/***/ 51:
+/***/ (function(__unusedmodule, exports, __webpack_require__) {
+
+"use strict";
+
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.run = void 0;
+const runTasks_1 = __importDefault(__webpack_require__(127));
+exports.run = () => __awaiter(void 0, void 0, void 0, function* () {
+    yield runTasks_1.default();
+});
+exports.run();
+
+
+/***/ }),
+
 /***/ 55:
 /***/ (function(module, __unusedexports, __webpack_require__) {
 
@@ -580,48 +608,48 @@ module.exports.default = macosRelease;
 
 "use strict";
 
-var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
-}) : (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    o[k2] = m[k];
-}));
-var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
-    Object.defineProperty(o, "default", { enumerable: true, value: v });
-}) : function(o, v) {
-    o["default"] = v;
-});
-var __importStar = (this && this.__importStar) || function (mod) {
-    if (mod && mod.__esModule) return mod;
-    var result = {};
-    if (mod != null) for (var k in mod) if (Object.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
-    __setModuleDefault(result, mod);
-    return result;
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getApiBaseUrl = exports.getProxyAgent = exports.getAuthString = void 0;
-const httpClient = __importStar(__webpack_require__(539));
-function getAuthString(token, options) {
-    if (!token && !options.auth) {
-        throw new Error('Parameter token or opts.auth is required');
+const core_1 = __webpack_require__(470);
+const gatherAllInputs_1 = __importDefault(__webpack_require__(874));
+const runJest_1 = __importDefault(__webpack_require__(349));
+const postComment_1 = __importDefault(__webpack_require__(690));
+const package_json_1 = __importDefault(__webpack_require__(439));
+const runTasks = (getInputParam, execSyncParam, actuallyPostComment = true) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        core_1.info(`Jest Coverage Commenter v${package_json_1.default.version}`);
+        const inputs = gatherAllInputs_1.default(getInputParam);
+        if (!inputs) {
+            return;
+        }
+        const { githubToken, testCommand } = inputs;
+        core_1.info('Inputs have been gathered');
+        const commentToPost = runJest_1.default(testCommand, execSyncParam);
+        core_1.info('Jest has been ran and coverage collected');
+        if (!commentToPost || !actuallyPostComment) {
+            return;
+        }
+        yield postComment_1.default(commentToPost, githubToken);
+        core_1.info('Comment has been posted to the PR');
     }
-    else if (token && options.auth) {
-        throw new Error('Parameters token and opts.auth may not both be specified');
+    catch (err) {
+        core_1.error(err);
+        core_1.setFailed(err.message);
     }
-    return typeof options.auth === 'string' ? options.auth : `token ${token}`;
-}
-exports.getAuthString = getAuthString;
-function getProxyAgent(destinationUrl) {
-    const hc = new httpClient.HttpClient();
-    return hc.getAgent(destinationUrl);
-}
-exports.getProxyAgent = getProxyAgent;
-function getApiBaseUrl() {
-    return process.env['GITHUB_API_URL'] || 'https://api.github.com';
-}
-exports.getApiBaseUrl = getApiBaseUrl;
-//# sourceMappingURL=utils.js.map
+});
+exports.default = runTasks;
+
 
 /***/ }),
 
@@ -1059,34 +1087,6 @@ function checkMode (stat, options) {
 
 /***/ }),
 
-/***/ 198:
-/***/ (function(__unusedmodule, exports, __webpack_require__) {
-
-"use strict";
-
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.run = void 0;
-const runTasks_1 = __importDefault(__webpack_require__(616));
-exports.run = () => __awaiter(void 0, void 0, void 0, function* () {
-    yield runTasks_1.default();
-});
-exports.run();
-
-
-/***/ }),
-
 /***/ 211:
 /***/ (function(module) {
 
@@ -1315,64 +1315,6 @@ class Context {
 }
 exports.Context = Context;
 //# sourceMappingURL=context.js.map
-
-/***/ }),
-
-/***/ 267:
-/***/ (function(__unusedmodule, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.DEFAULT_TEST_COMMAND = exports.NO_TOKEN_FAIL_MESSAGE = void 0;
-const core_1 = __webpack_require__(470);
-exports.NO_TOKEN_FAIL_MESSAGE = 'No github token provided (input: github_token)';
-exports.DEFAULT_TEST_COMMAND = 'npx jest --coverage --noChangesSince=master';
-const gatherAllInputs = (inputs) => {
-    try {
-        const githubToken = determineValue([
-            inputs === null || inputs === void 0 ? void 0 : inputs.github_token,
-            core_1.getInput('github_token'),
-        ]);
-        core_1.debug(`Input - github_token: ${githubToken}`);
-        if (!githubToken) {
-            return core_1.setFailed(exports.NO_TOKEN_FAIL_MESSAGE);
-        }
-        const testCommand = determineValue([inputs === null || inputs === void 0 ? void 0 : inputs.test_command, core_1.getInput('test_command')], exports.DEFAULT_TEST_COMMAND);
-        core_1.debug(`Input - test_command: ${testCommand}`);
-        return {
-            githubToken,
-            testCommand,
-        };
-    }
-    catch (err) {
-        core_1.error('There was an error while gathering inputs');
-        throw err;
-    }
-};
-const determineValue = (valuesInOrderOfImportance, defaultValue) => {
-    for (const value of valuesInOrderOfImportance) {
-        if (!isFalsyOrBlank(value)) {
-            return value;
-        }
-    }
-    if (defaultValue) {
-        return defaultValue;
-    }
-    return null;
-};
-/**
- * GitHub Actions getInput returns blank strings, not null.
- * @param value
- */
-const isFalsyOrBlank = (value) => {
-    if (!value || value === '') {
-        return true;
-    }
-    return false;
-};
-exports.default = gatherAllInputs;
-
 
 /***/ }),
 
@@ -1618,74 +1560,60 @@ isStream.transform = function (stream) {
 
 /***/ }),
 
-/***/ 346:
+/***/ 349:
 /***/ (function(__unusedmodule, exports, __webpack_require__) {
 
 "use strict";
 
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.COMMENT_PREFIX = void 0;
+exports.JEST_ERROR_MESSAGE = void 0;
 const core_1 = __webpack_require__(470);
-const github_1 = __webpack_require__(469);
-exports.COMMENT_PREFIX = '## Jest Coverage';
-const postComment = (commentToPost, githubToken, getOctokitParam) => __awaiter(void 0, void 0, void 0, function* () {
-    var _a, _b, _c, _d;
+const child_process_1 = __webpack_require__(129);
+const A_BUNCH_OF_DASHES = '----------';
+exports.JEST_ERROR_MESSAGE = 'There was an error while running Jest.';
+const runJest = (testCommand, execSyncParam) => {
     try {
-        const prNumber = (_a = github_1.context === null || github_1.context === void 0 ? void 0 : github_1.context.issue) === null || _a === void 0 ? void 0 : _a.number;
-        const repo = (_b = github_1.context === null || github_1.context === void 0 ? void 0 : github_1.context.repo) === null || _b === void 0 ? void 0 : _b.repo;
-        const owner = (_c = github_1.context === null || github_1.context === void 0 ? void 0 : github_1.context.repo) === null || _c === void 0 ? void 0 : _c.owner;
-        if (!prNumber || !repo || !owner) {
-            return core_1.setFailed(`Was unable to obtain: ${[prNumber, repo, owner]
-                .filter((item) => item === undefined)
-                .join(', ')} from context.`);
+        const execSync = execSyncParam !== null && execSyncParam !== void 0 ? execSyncParam : child_process_1.execSync;
+        const codeCoverage = execSync(testCommand).toString();
+        try {
+            const codeCoverageLines = codeCoverage.split('\n');
+            const formattedCoverage = formatResponse(codeCoverageLines);
+            core_1.debug(formattedCoverage);
+            return formattedCoverage;
         }
-        const getOctokit = getOctokitParam !== null && getOctokitParam !== void 0 ? getOctokitParam : github_1.getOctokit;
-        const github = getOctokit(githubToken);
-        const prComments = yield github.issues.listComments({
-            issue_number: prNumber,
-            repo,
-            owner,
-        });
-        const existingComment = (_d = prComments === null || prComments === void 0 ? void 0 : prComments.data) === null || _d === void 0 ? void 0 : _d.find((comment) => {
-            var _a, _b;
-            return ((_a = comment === null || comment === void 0 ? void 0 : comment.user) === null || _a === void 0 ? void 0 : _a.type) === 'Bot' && ((_b = comment === null || comment === void 0 ? void 0 : comment.body) === null || _b === void 0 ? void 0 : _b.startsWith(exports.COMMENT_PREFIX));
-        });
-        const commentBody = `${exports.COMMENT_PREFIX}
-        
-        ${commentToPost}`;
-        if (existingComment) {
-            yield github.issues.updateComment({
-                issue_number: prNumber,
-                comment_id: existingComment.comment_id,
-                repo,
-                owner,
-                body: commentBody,
-            });
-        }
-        else {
-            yield github.issues.createComment({
-                issue_number: prNumber,
-                repo,
-                owner,
-                body: commentBody,
-            });
+        catch (innerError) {
+            core_1.warning("Something went wrong with formatting the message, returning the entire text instead. Perhaps you didn't run Jest with --coverage?");
+            return `\`\`\`
+${codeCoverage}
+\`\`\``;
         }
     }
     catch (err) {
-        core_1.error('There was an error while posting the comment');
+        core_1.error(exports.JEST_ERROR_MESSAGE);
         throw err;
     }
-});
-exports.default = postComment;
+};
+const formatResponse = (codeCoverageLines) => {
+    const result = [];
+    let tableStarted = false;
+    let linesSinceTableStarted = 0;
+    for (const line of codeCoverageLines) {
+        if (!tableStarted) {
+            if (line.startsWith(A_BUNCH_OF_DASHES)) {
+                tableStarted = true;
+                continue;
+            }
+            continue;
+        }
+        linesSinceTableStarted++;
+        if (linesSinceTableStarted > 2 && line.startsWith(A_BUNCH_OF_DASHES)) {
+            continue;
+        }
+        result.push(line.replace(/^ /gm, '_'));
+    }
+    return result.join('\n');
+};
+exports.default = runJest;
 
 
 /***/ }),
@@ -2235,6 +2163,13 @@ function escapeProperty(s) {
         .replace(/,/g, '%2C');
 }
 //# sourceMappingURL=command.js.map
+
+/***/ }),
+
+/***/ 439:
+/***/ (function(module) {
+
+module.exports = {"name":"jest-coverage-commenter-action","version":"1.0.5","private":true,"description":"Comment on PRs with Jest Coverage","main":"lib/src/main.js","scripts":{"build":"tsc","format":"prettier --write **/*.ts","format-check":"prettier --check **/*.ts","lint":"eslint src/**/*.ts","pack":"ncc build","test":"jest","test:coverage":"jest --coverage --changedSince=origin/master","all":"npm run build && npm run format && npm run lint && npm run pack && npm test"},"repository":{"type":"git","url":"git+https://github.com/actions/typescript-action.git"},"keywords":["actions","node","setup"],"author":"Derek Kershner","license":"MIT","dependencies":{"@actions/core":"^1.2.4","@actions/github":"^3.0.0"},"devDependencies":{"@types/jest":"^26.0.0","@types/node":"^14.0.13","@typescript-eslint/parser":"^3.2.0","@zeit/ncc":"^0.22.3","cross-env":"^7.0.2","eslint":"^7.2.0","eslint-plugin-github":"^4.0.1","eslint-plugin-jest":"^23.13.2","jest":"^26.0.1","jest-circus":"^26.0.1","js-yaml":"^3.14.0","prettier":"^2.0.5","ts-jest":"^26.1.0","typescript":"^3.9.5"}};
 
 /***/ }),
 
@@ -4505,6 +4440,56 @@ module.exports = /^#!.*/;
 
 /***/ }),
 
+/***/ 500:
+/***/ (function(__unusedmodule, exports, __webpack_require__) {
+
+"use strict";
+
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (Object.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.getApiBaseUrl = exports.getProxyAgent = exports.getAuthString = void 0;
+const httpClient = __importStar(__webpack_require__(539));
+function getAuthString(token, options) {
+    if (!token && !options.auth) {
+        throw new Error('Parameter token or opts.auth is required');
+    }
+    else if (token && options.auth) {
+        throw new Error('Parameters token and opts.auth may not both be specified');
+    }
+    return typeof options.auth === 'string' ? options.auth : `token ${token}`;
+}
+exports.getAuthString = getAuthString;
+function getProxyAgent(destinationUrl) {
+    const hc = new httpClient.HttpClient();
+    return hc.getAgent(destinationUrl);
+}
+exports.getProxyAgent = getProxyAgent;
+function getApiBaseUrl() {
+    return process.env['GITHUB_API_URL'] || 'https://api.github.com';
+}
+exports.getApiBaseUrl = getApiBaseUrl;
+//# sourceMappingURL=utils.js.map
+
+/***/ }),
+
 /***/ 510:
 /***/ (function(module) {
 
@@ -4585,7 +4570,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getOctokitOptions = exports.GitHub = exports.context = void 0;
 const Context = __importStar(__webpack_require__(262));
-const Utils = __importStar(__webpack_require__(127));
+const Utils = __importStar(__webpack_require__(500));
 // octokit + plugins
 const core_1 = __webpack_require__(448);
 const plugin_rest_endpoint_methods_1 = __webpack_require__(842);
@@ -6858,54 +6843,6 @@ module.exports = require("events");
 
 /***/ }),
 
-/***/ 616:
-/***/ (function(__unusedmodule, exports, __webpack_require__) {
-
-"use strict";
-
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-const core_1 = __webpack_require__(470);
-const gatherAllInputs_1 = __importDefault(__webpack_require__(267));
-const runJest_1 = __importDefault(__webpack_require__(723));
-const postComment_1 = __importDefault(__webpack_require__(346));
-const runTasks = (inputsParam, execSyncParam, actuallyPostComment = true) => __awaiter(void 0, void 0, void 0, function* () {
-    try {
-        const inputs = gatherAllInputs_1.default(inputsParam);
-        if (!inputs) {
-            return;
-        }
-        const { githubToken, testCommand } = inputs;
-        core_1.info('Inputs have been gathered');
-        const commentToPost = runJest_1.default(testCommand, execSyncParam);
-        core_1.info('Jest has been ran and coverage collected');
-        if (!commentToPost || !actuallyPostComment) {
-            return;
-        }
-        yield postComment_1.default(commentToPost, githubToken);
-        core_1.info('Comment has been posted to the PR');
-    }
-    catch (err) {
-        core_1.error(err);
-        core_1.setFailed(err.message);
-    }
-});
-exports.default = runTasks;
-
-
-/***/ }),
-
 /***/ 621:
 /***/ (function(module, __unusedexports, __webpack_require__) {
 
@@ -7111,6 +7048,82 @@ module.exports = opts => {
 
 /***/ }),
 
+/***/ 690:
+/***/ (function(__unusedmodule, exports, __webpack_require__) {
+
+"use strict";
+
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.COMMENT_PREFIX = void 0;
+const core_1 = __webpack_require__(470);
+const github_1 = __webpack_require__(469);
+exports.COMMENT_PREFIX = '## Jest Coverage';
+const postComment = (commentToPost, githubToken, getOctokitParam) => __awaiter(void 0, void 0, void 0, function* () {
+    var _a, _b, _c, _d;
+    try {
+        const prNumber = (_a = github_1.context === null || github_1.context === void 0 ? void 0 : github_1.context.issue) === null || _a === void 0 ? void 0 : _a.number;
+        const repo = (_b = github_1.context === null || github_1.context === void 0 ? void 0 : github_1.context.repo) === null || _b === void 0 ? void 0 : _b.repo;
+        const owner = (_c = github_1.context === null || github_1.context === void 0 ? void 0 : github_1.context.repo) === null || _c === void 0 ? void 0 : _c.owner;
+        if (!prNumber || !repo || !owner) {
+            return core_1.setFailed(`Was unable to obtain: ${[prNumber, repo, owner]
+                .filter((item) => item === undefined)
+                .join(', ')} from context.`);
+        }
+        const getOctokit = getOctokitParam !== null && getOctokitParam !== void 0 ? getOctokitParam : github_1.getOctokit;
+        const github = getOctokit(githubToken);
+        const prComments = yield github.issues.listComments({
+            issue_number: prNumber,
+            repo,
+            owner,
+        });
+        const existingComment = (_d = prComments === null || prComments === void 0 ? void 0 : prComments.data) === null || _d === void 0 ? void 0 : _d.find((comment) => {
+            var _a, _b;
+            return ((_a = comment === null || comment === void 0 ? void 0 : comment.user) === null || _a === void 0 ? void 0 : _a.type) === 'Bot' && ((_b = comment === null || comment === void 0 ? void 0 : comment.body) === null || _b === void 0 ? void 0 : _b.startsWith(exports.COMMENT_PREFIX));
+        });
+        const commentBody = `${exports.COMMENT_PREFIX}
+
+${commentToPost}`;
+        core_1.info(`Comment to post:
+${commentBody}`);
+        if (existingComment === null || existingComment === void 0 ? void 0 : existingComment.id) {
+            core_1.info(`Previous comment found: ${existingComment.id}`);
+            yield github.issues.updateComment({
+                issue_number: prNumber,
+                comment_id: existingComment.id,
+                repo,
+                owner,
+                body: commentBody,
+            });
+        }
+        else {
+            core_1.info('Creating new comment');
+            yield github.issues.createComment({
+                issue_number: prNumber,
+                repo,
+                owner,
+                body: commentBody,
+            });
+        }
+    }
+    catch (err) {
+        core_1.error('There was an error while posting the comment');
+        throw err;
+    }
+});
+exports.default = postComment;
+
+
+/***/ }),
+
 /***/ 692:
 /***/ (function(__unusedmodule, exports) {
 
@@ -7158,56 +7171,6 @@ module.exports = (promise, onFinally) => {
 		})
 	);
 };
-
-
-/***/ }),
-
-/***/ 723:
-/***/ (function(__unusedmodule, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.JEST_ERROR_MESSAGE = void 0;
-const core_1 = __webpack_require__(470);
-const child_process_1 = __webpack_require__(129);
-const A_BUNCH_OF_DASHES = '----------';
-exports.JEST_ERROR_MESSAGE = 'There was an error while running Jest.';
-const runJest = (testCommand, execSyncParam) => {
-    try {
-        const execSync = execSyncParam !== null && execSyncParam !== void 0 ? execSyncParam : child_process_1.execSync;
-        const codeCoverage = execSync(testCommand).toString();
-        try {
-            const codeCoverageLines = codeCoverage.split('\n');
-            const formattedCoverage = removeNonMarkdownLines(codeCoverageLines);
-            core_1.debug(formattedCoverage);
-            return formattedCoverage;
-        }
-        catch (innerError) {
-            core_1.warning("Something went wrong with formatting the message, returning the entire text instead. Perhaps you didn't run Jest with --coverage?");
-            return `\`\`\`
-            ${codeCoverage}
-            \`\`\``;
-        }
-    }
-    catch (err) {
-        core_1.error(exports.JEST_ERROR_MESSAGE);
-        throw err;
-    }
-};
-const removeNonMarkdownLines = (codeCoveragesLines) => {
-    const result = [...codeCoveragesLines];
-    const firstLine = result.shift();
-    if (firstLine && !(firstLine === null || firstLine === void 0 ? void 0 : firstLine.startsWith(A_BUNCH_OF_DASHES))) {
-        result.unshift(firstLine);
-    }
-    const lastLine = result.pop();
-    if (lastLine && !lastLine.startsWith(A_BUNCH_OF_DASHES)) {
-        result.push(lastLine);
-    }
-    return result.join('\n');
-};
-exports.default = runJest;
 
 
 /***/ }),
@@ -9498,6 +9461,62 @@ function removeHook (state, name, method) {
 
   state.registry[name].splice(index, 1)
 }
+
+
+/***/ }),
+
+/***/ 874:
+/***/ (function(__unusedmodule, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.DEFAULT_TEST_COMMAND = exports.NO_TOKEN_FAIL_MESSAGE = void 0;
+const core_1 = __webpack_require__(470);
+exports.NO_TOKEN_FAIL_MESSAGE = 'No github token provided (input: github_token)';
+exports.DEFAULT_TEST_COMMAND = 'npx jest --coverage';
+const gatherAllInputs = (getInputParam) => {
+    try {
+        const getInput = getInputParam !== null && getInputParam !== void 0 ? getInputParam : core_1.getInput;
+        const githubToken = determineValue([getInput('github_token')]);
+        core_1.debug(`Input - github_token: ${githubToken}`);
+        if (!githubToken) {
+            return core_1.setFailed(exports.NO_TOKEN_FAIL_MESSAGE);
+        }
+        const testCommand = determineValue([getInput('test_command')], exports.DEFAULT_TEST_COMMAND);
+        core_1.debug(`Input - test_command: ${testCommand}`);
+        return {
+            githubToken,
+            testCommand,
+        };
+    }
+    catch (err) {
+        core_1.error('There was an error while gathering inputs');
+        throw err;
+    }
+};
+const determineValue = (valuesInOrderOfImportance, defaultValue) => {
+    for (const value of valuesInOrderOfImportance) {
+        if (!isFalsyOrBlank(value)) {
+            return value;
+        }
+    }
+    if (defaultValue) {
+        return defaultValue;
+    }
+    return null;
+};
+/**
+ * GitHub Actions getInput returns blank strings, not null.
+ * @param value
+ */
+const isFalsyOrBlank = (value) => {
+    if (!value || value === '') {
+        return true;
+    }
+    return false;
+};
+exports.default = gatherAllInputs;
 
 
 /***/ }),

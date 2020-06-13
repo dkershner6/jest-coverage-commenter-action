@@ -3,12 +3,15 @@ import gatherAllInputs from './tasks/gatherAllInputs';
 import runJest from './tasks/runJest';
 import postComment from './tasks/postComment';
 
+import packageJson from '../package.json';
+
 const runTasks = async (
     getInputParam?: (key: string) => string,
     execSyncParam?: (command: string) => Buffer,
     actuallyPostComment = true
 ): Promise<void> => {
     try {
+        info(`Jest Coverage Commenter v${packageJson.version}`);
         const inputs = gatherAllInputs(getInputParam);
         if (!inputs) {
             return;
