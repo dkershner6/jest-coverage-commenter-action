@@ -1,10 +1,13 @@
-name: 'Your name here'
-description: 'Provide a description here'
-author: 'Your name or organization here'
+name: 'Jest Coverage Commenter'
+description: 'Comment on PRs with Jest Coverage Information'
+author: 'Derek Kershner'
 inputs:
-  myInput:              # change this
-    description: 'input description here'
+  github_token:
+    description: 'A GitHub Token, the standard one is great'
     default: 'default value if applicable'
+  test_command:
+    description: 'The test command to run, that also runs coverage appropriately'
+    default: 'npx jest --coverage --noChangesSince=master'
 runs:
   using: 'node12'
   main: 'dist/index.js'
