@@ -41,11 +41,11 @@ const postComment = async (
         
         ${commentToPost}`;
 
-        if (existingComment) {
-            info(`Previous comment found: ${existingComment.comment_id}`);
+        if (existingComment?.id) {
+            info(`Previous comment found: ${existingComment.id}`);
             await github.issues.updateComment({
                 issue_number: prNumber,
-                comment_id: existingComment.comment_id,
+                comment_id: existingComment.id,
                 repo,
                 owner,
                 body: commentBody,
