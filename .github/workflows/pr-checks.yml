@@ -8,19 +8,25 @@ jobs:
   build: # make sure build/ci work properly
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v1
+      - uses: actions/checkout@v2
       - run: |
           npm install
           npm run all
   test: # make sure the action works on a clean machine without building
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v1
-      - run: npm i
-      - uses: ./
-        id: "jest-coverage-commenter-action"
+      - uses: actions/checkout@v2
         with:
-          github_token: "${{ secrets.GITHUB_TOKEN }}""
+          fetch-depth: 0
+      - run: |
+          npm i
+          npm run build
+          npm run pack
+      - name: Run Self
+        uses: ./
+        id: jest-coverage-commenter-action
+        with:
+          github_token: "${{ secrets.GITHUB_TOKEN }}"
           test_command: "npm run test:coverage"
   other-checks:
     runs-on: ubuntu-latest

@@ -4,10 +4,11 @@ author: 'Derek Kershner'
 inputs:
   github_token:
     description: 'A GitHub Token, the standard one is great'
-    default: 'default value if applicable'
+    required: true
   test_command:
     description: 'The test command to run, that also runs coverage appropriately'
-    default: 'npx jest --coverage --noChangesSince=master'
+    default: 'npx jest --coverage'
+    required: false
 runs:
   using: 'node12'
   main: 'dist/index.js'

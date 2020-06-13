@@ -23,11 +23,17 @@ describe('Main Tests', () => {
     it('Should call execSync with correct testCommand, and format response correctly', async () => {
         const execSync = jest.fn().mockReturnValue(simpleCoverage);
 
-        const inputs = {
-            github_token: GITHUB_TOKEN,
-            test_command: TEST_COMMAND,
-        };
-        await runTasks(inputs, execSync, false);
+        const getInput = jest.fn().mockImplementation((key: string) => {
+            switch (key) {
+                case 'github_token':
+                    return GITHUB_TOKEN;
+                case 'test_command':
+                    return TEST_COMMAND;
+                default:
+                    return '';
+            }
+        });
+        await runTasks(getInput, execSync, false);
 
         expect(execSync).toHaveBeenCalledWith(TEST_COMMAND);
         expect(debugSpy).toHaveBeenCalledWith(simpleExpectation);
@@ -37,10 +43,15 @@ describe('Main Tests', () => {
     it('Should call with default test command if none given', async () => {
         const execSync = jest.fn().mockReturnValue(simpleCoverage);
 
-        const inputs = {
-            github_token: GITHUB_TOKEN,
-        };
-        await runTasks(inputs, execSync, false);
+        const getInput = jest.fn().mockImplementation((key: string) => {
+            switch (key) {
+                case 'github_token':
+                    return GITHUB_TOKEN;
+                default:
+                    return '';
+            }
+        });
+        await runTasks(getInput, execSync, false);
 
         expect(execSync).toHaveBeenCalledWith(DEFAULT_TEST_COMMAND);
         expect(debugSpy).toHaveBeenCalledWith(simpleExpectation);
@@ -50,10 +61,15 @@ describe('Main Tests', () => {
     it('Should fail with no github_token', async () => {
         const execSync = jest.fn().mockReturnValue(simpleCoverage);
 
-        const inputs = {
-            test_command: TEST_COMMAND,
-        };
-        await runTasks(inputs, execSync, false);
+        const getInput = jest.fn().mockImplementation((key: string) => {
+            switch (key) {
+                case 'test_command':
+                    return TEST_COMMAND;
+                default:
+                    return '';
+            }
+        });
+        await runTasks(getInput, execSync, false);
 
         expect(setFailedSpy).toHaveBeenCalledWith(NO_TOKEN_FAIL_MESSAGE);
     });
@@ -63,11 +79,17 @@ describe('Main Tests', () => {
             throw new Error('Jest Failed');
         });
 
-        const inputs = {
-            github_token: GITHUB_TOKEN,
-            test_command: TEST_COMMAND,
-        };
-        await runTasks(inputs, execSync, false);
+        const getInput = jest.fn().mockImplementation((key: string) => {
+            switch (key) {
+                case 'github_token':
+                    return GITHUB_TOKEN;
+                case 'test_command':
+                    return TEST_COMMAND;
+                default:
+                    return '';
+            }
+        });
+        await runTasks(getInput, execSync, false);
 
         expect(errorSpy).toHaveBeenCalledWith(JEST_ERROR_MESSAGE);
         expect(setFailedSpy).toHaveBeenCalledWith('Jest Failed');
