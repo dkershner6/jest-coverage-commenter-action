@@ -1,6 +1,6 @@
 {
   "name": "jest-coverage-commenter-action",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "private": true,
   "description": "Comment on PRs with Jest Coverage",
   "main": "lib/main.js",
@@ -22,7 +22,7 @@
     "node",
     "setup"
   ],
-  "author": "YourNameOrOrganization",
+  "author": "Derek Kershner",
   "license": "MIT",
   "dependencies": {
     "@actions/core": "^1.2.4",
