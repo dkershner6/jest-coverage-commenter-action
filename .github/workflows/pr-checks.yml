@@ -1,0 +1,48 @@
+name: "Check on PRs"
+on: # rebuild any PRs and main branch changes
+  pull_request:
+    branches:
+      - master
+
+jobs:
+  build: # make sure build/ci work properly
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+      - run: |
+          npm install
+          npm run all
+  test: # make sure the action works on a clean machine without building
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+      - run: npm i
+      - uses: ./
+        id: "jest-coverage-commenter-action"
+        with:
+          github_token: "${{ secrets.GITHUB_TOKEN }}""
+          test_command: "npm run test:coverage"
+  other-checks:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout 🛎️
+        uses: actions/checkout@v2
+        with:
+          persist-credentials: false
+      - name: Check if version has been updated
+        id: versioncheck
+        uses: EndBug/version-check@v1
+        with:
+          diff-search: true
+          token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Fail on no version updated
+        if: steps.versioncheck.outputs.changed != 'true'
+        run: 'echo "No version change :/" && exit 1'
+  auto-approve-pr:
+    runs-on: ubuntu-latest
+    needs: [build, test, other-checks]
+    steps:
+      - uses: hmarr/auto-approve-action@v2.0.0
+        if: github.actor == 'dependabot[bot]' || github.actor == 'dependabot-preview[bot]' || github.actor == 'dkershner6'
+        with:
+          github-token: "${{ secrets.GITHUB_TOKEN }}"
