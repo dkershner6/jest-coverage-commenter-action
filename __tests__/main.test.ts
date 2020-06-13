@@ -12,7 +12,7 @@ describe('Main Tests', () => {
     const GITHUB_TOKEN = '12345';
     const TEST_COMMAND = 'npm run test --coverage';
 
-    const debugSpy = jest.spyOn(core, 'debug');
+    const infoSpy = jest.spyOn(core, 'info');
     const errorSpy = jest.spyOn(core, 'error');
     const setFailedSpy = jest.spyOn(core, 'setFailed');
 
@@ -36,7 +36,7 @@ describe('Main Tests', () => {
         await runTasks(getInput, execSync, false);
 
         expect(execSync).toHaveBeenCalledWith(TEST_COMMAND);
-        expect(debugSpy).toHaveBeenCalledWith(simpleExpectation);
+        expect(infoSpy).toHaveBeenCalledWith(simpleExpectation);
         expect(setFailedSpy).not.toHaveBeenCalled();
     });
 
@@ -54,7 +54,7 @@ describe('Main Tests', () => {
         await runTasks(getInput, execSync, false);
 
         expect(execSync).toHaveBeenCalledWith(DEFAULT_TEST_COMMAND);
-        expect(debugSpy).toHaveBeenCalledWith(simpleExpectation);
+        expect(infoSpy).toHaveBeenCalledWith(simpleExpectation);
         expect(setFailedSpy).not.toHaveBeenCalled();
     });
 
