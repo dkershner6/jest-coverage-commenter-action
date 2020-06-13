@@ -15,7 +15,7 @@ const runJest = (
         try {
             const codeCoverageLines = codeCoverage.split('\n');
 
-            const formattedCoverage = removeNonMarkdownLines(codeCoverageLines);
+            const formattedCoverage = formatResponse(codeCoverageLines);
             info(formattedCoverage);
             return formattedCoverage;
         } catch (innerError) {
@@ -32,17 +32,24 @@ const runJest = (
     }
 };
 
-const removeNonMarkdownLines = (codeCoveragesLines: string[]) => {
-    const result = [...codeCoveragesLines];
+const formatResponse = (codeCoverageLines: string[]) => {
+    const result = [];
+    let tableStarted = false;
+    let linesSinceTableStarted = 0;
 
-    const firstLine = result.shift();
-    if (firstLine && !firstLine?.startsWith(A_BUNCH_OF_DASHES)) {
-        result.unshift(firstLine);
-    }
-    const lastLine = result.pop();
-
-    if (lastLine && !lastLine.startsWith(A_BUNCH_OF_DASHES)) {
-        result.push(lastLine);
+    for (const line of codeCoverageLines) {
+        if (!tableStarted) {
+            if (line.startsWith(A_BUNCH_OF_DASHES)) {
+                tableStarted = true;
+                continue;
+            }
+            continue;
+        }
+        linesSinceTableStarted++;
+        if (linesSinceTableStarted > 2 && line.startsWith(A_BUNCH_OF_DASHES)) {
+            continue;
+        }
+        result.push(line);
     }
 
     return result.join('\n');
