@@ -1,6 +1,6 @@
 {
   "name": "jest-coverage-commenter-action",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "private": true,
   "description": "Comment on PRs with Jest Coverage",
   "main": "lib/main.js",
