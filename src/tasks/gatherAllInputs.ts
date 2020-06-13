@@ -12,7 +12,7 @@ export interface IInputs {
 
 export const NO_TOKEN_FAIL_MESSAGE =
     'No github token provided (input: github_token)';
-export const DEFAULT_TEST_COMMAND = 'npx jest --coverage --changedSince=master';
+export const DEFAULT_TEST_COMMAND = 'npx jest --coverage';
 
 const gatherAllInputs = (
     getInputParam: (key: string) => string

@@ -7,7 +7,7 @@ inputs:
     required: true
   test_command:
     description: 'The test command to run, that also runs coverage appropriately'
-    default: 'npx jest --coverage --changedSince=master'
+    default: 'npx jest --coverage'
     required: false
 runs:
   using: 'node12'
