@@ -52,7 +52,9 @@ const formatResponse = (codeCoverageLines: string[]) => {
         result.push(line);
     }
 
-    return result.join('\n');
+    return `\`\`\`
+${result.join('\n')}
+\`\`\``;
 };
 
 export default runJest;

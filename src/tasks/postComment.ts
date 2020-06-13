@@ -38,7 +38,7 @@ const postComment = async (
         );
 
         const commentBody = `${COMMENT_PREFIX}
-        
+
 ${commentToPost}`;
 
         info(`Comment to post:
