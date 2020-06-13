@@ -23,8 +23,8 @@ const runJest = (
                 "Something went wrong with formatting the message, returning the entire text instead. Perhaps you didn't run Jest with --coverage?"
             );
             return `\`\`\`
-            ${codeCoverage}
-            \`\`\``;
+${codeCoverage}
+\`\`\``;
         }
     } catch (err) {
         error(JEST_ERROR_MESSAGE);
@@ -49,12 +49,10 @@ const formatResponse = (codeCoverageLines: string[]) => {
         if (linesSinceTableStarted > 2 && line.startsWith(A_BUNCH_OF_DASHES)) {
             continue;
         }
-        result.push(line);
+        result.push(line.replace(/^ /gm, '_'));
     }
 
-    return `\`\`\`
-${result.join('\n')}
-\`\`\``;
+    return result.join('\n');
 };
 
 export default runJest;
