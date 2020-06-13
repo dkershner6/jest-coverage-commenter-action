@@ -39,10 +39,10 @@ const postComment = async (
 
         const commentBody = `${COMMENT_PREFIX}
         
-        ${commentToPost}`;
+${commentToPost}`;
 
         info(`Comment to post:
-        ${commentBody}`);
+${commentBody}`);
 
         if (existingComment?.id) {
             info(`Previous comment found: ${existingComment.id}`);
