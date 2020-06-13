@@ -15,12 +15,13 @@ jobs:
   test: # make sure the action works on a clean machine without building
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v1
+      - uses: actions/checkout@v2
       - run: npm i
-      - uses: ./
-        id: "jest-coverage-commenter-action"
+      - name: Run Self
+        uses: ./
+        id: jest-coverage-commenter-action
         with:
-          github_token: "${{ secrets.GITHUB_TOKEN }}""
+          github_token: "${{ secrets.GITHUB_TOKEN }}"
           test_command: "npm run test:coverage"
   other-checks:
     runs-on: ubuntu-latest
