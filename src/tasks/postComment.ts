@@ -41,6 +41,8 @@ const postComment = async (
         
         ${commentToPost}`;
 
+        info(commentBody);
+
         if (existingComment?.id) {
             info(`Previous comment found: ${existingComment.id}`);
             await github.issues.updateComment({
