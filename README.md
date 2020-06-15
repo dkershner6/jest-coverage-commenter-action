@@ -22,8 +22,6 @@ None
 ```yaml
 on: pull_request
 
-name: Run an action that commits
-
 jobs:
   test-coverage:
     runs-on: ubuntu-latest
