@@ -40,7 +40,9 @@ const postComment = async (
         const commentBody = `${COMMENT_PREFIX}
 
 <details>
+
 ${commentToPost}
+
 </details>`;
 
         info(`Comment to post:
