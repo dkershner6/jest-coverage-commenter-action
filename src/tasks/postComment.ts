@@ -39,11 +39,7 @@ const postComment = async (
 
         const commentBody = `${COMMENT_PREFIX}
 
-<details>\n\n
-
-${commentToPost}
-
-\n\n</details>`;
+${commentToPost}`;
 
         info(`Comment to post:
 ${commentBody}`);
