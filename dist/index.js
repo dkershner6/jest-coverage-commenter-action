@@ -2169,7 +2169,7 @@ function escapeProperty(s) {
 /***/ 439:
 /***/ (function(module) {
 
-module.exports = {"name":"jest-coverage-commenter-action","version":"1.1.0","private":true,"description":"Comment on PRs with Jest Coverage","main":"lib/src/main.js","scripts":{"build":"tsc","format":"prettier --write **/*.ts","format-check":"prettier --check **/*.ts","lint":"eslint src/**/*.ts","pack":"ncc build","test":"jest","test:coverage":"jest --coverage --changedSince=origin/master","all":"npm run build && npm run format && npm run lint && npm run pack && npm test"},"repository":{"type":"git","url":"git+https://github.com/actions/typescript-action.git"},"keywords":["actions","node","setup"],"author":"Derek Kershner","license":"MIT","dependencies":{"@actions/core":"^1.2.4","@actions/github":"^3.0.0"},"devDependencies":{"@types/jest":"^26.0.0","@types/node":"^14.0.13","@typescript-eslint/parser":"^3.2.0","@zeit/ncc":"^0.22.3","cross-env":"^7.0.2","eslint":"^7.2.0","eslint-plugin-github":"^4.0.1","eslint-plugin-jest":"^23.13.2","jest":"^26.0.1","jest-circus":"^26.0.1","js-yaml":"^3.14.0","prettier":"^2.0.5","ts-jest":"^26.1.0","typescript":"^3.9.5"}};
+module.exports = {"name":"jest-coverage-commenter-action","version":"1.1.4","private":true,"description":"Comment on PRs with Jest Coverage","main":"lib/src/main.js","scripts":{"build":"tsc","format":"prettier --write **/*.ts","format-check":"prettier --check **/*.ts","lint":"eslint src/**/*.ts","pack":"ncc build","test":"jest","test:coverage":"jest --coverage --changedSince=origin/master","all":"npm run build && npm run format && npm run lint && npm run pack && npm test"},"repository":{"type":"git","url":"git+https://github.com/actions/typescript-action.git"},"keywords":["actions","node","setup"],"author":"Derek Kershner","license":"MIT","dependencies":{"@actions/core":"^1.2.4","@actions/github":"^3.0.0"},"devDependencies":{"@types/jest":"^26.0.0","@types/node":"^14.0.13","@typescript-eslint/parser":"^3.2.0","@zeit/ncc":"^0.22.3","cross-env":"^7.0.2","eslint":"^7.2.0","eslint-plugin-github":"^4.0.1","eslint-plugin-jest":"^23.13.2","jest":"^26.0.1","jest-circus":"^26.0.1","js-yaml":"^3.14.0","prettier":"^2.0.5","ts-jest":"^26.1.0","typescript":"^3.9.5"}};
 
 /***/ }),
 
@@ -7091,7 +7091,11 @@ const postComment = (commentToPost, githubToken, getOctokitParam) => __awaiter(v
         });
         const commentBody = `${exports.COMMENT_PREFIX}
 
-<details>${commentToPost}</details>`;
+<details>\n\n
+
+${commentToPost}
+
+\n\n</details>`;
         core_1.info(`Comment to post:
 ${commentBody}`);
         if (existingComment === null || existingComment === void 0 ? void 0 : existingComment.id) {
