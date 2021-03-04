@@ -59,9 +59,8 @@ const formatResponse = (codeCoverageLines: string[]): FormattedCoverage => {
         }
         if (linesSinceTableStarted <= 3) {
             summaryResult.push(line.replace(/^ /gm, '_'));
-        } else {
-            result.push(line.replace(/^ /gm, '_'));
         }
+        result.push(line.replace(/^ /gm, '_'));
     }
 
     return { summary: summaryResult.join('\n'), details: result.join('\n') };
