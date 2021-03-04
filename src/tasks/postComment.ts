@@ -1,11 +1,12 @@
 import { error, setFailed, info } from '@actions/core';
 import { getOctokit as getOctokitImport, context } from '@actions/github';
 import { Octokit } from '@octokit/core';
+import { FormattedCoverage } from './runJest';
 
 export const COMMENT_PREFIX = '## Jest Coverage';
 
 const postComment = async (
-    commentToPost: string,
+    formattedCoverage: FormattedCoverage,
     githubToken: string,
     getOctokitParam?: (token: string) => Octokit
 ): Promise<void> => {
@@ -39,9 +40,11 @@ const postComment = async (
 
         const commentBody = `${COMMENT_PREFIX}
 
+${formattedCoverage?.summary ? formattedCoverage.summary : null}
+
 <details>\n\n
 
-${commentToPost}
+${formattedCoverage.details}
 
 \n\n</details>`;
 
