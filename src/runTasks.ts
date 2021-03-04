@@ -19,12 +19,12 @@ const runTasks = async (
         const { githubToken, testCommand } = inputs;
         info('Inputs have been gathered');
 
-        const commentToPost = runJest(testCommand, execSyncParam);
+        const formattedCoverage = runJest(testCommand, execSyncParam);
         info('Jest has been ran and coverage collected');
-        if (!commentToPost || !actuallyPostComment) {
+        if (!formattedCoverage || !actuallyPostComment) {
             return;
         }
-        await postComment(commentToPost, githubToken);
+        await postComment(formattedCoverage, githubToken);
         info('Comment has been posted to the PR');
     } catch (err) {
         error(err);

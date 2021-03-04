@@ -13,3 +13,5 @@ export const simpleExpectation = `File      | % Stmts | % Branch | % Funcs | % L
 ----------|---------|----------|---------|---------|-------------------
 All files |     100 |      100 |     100 |     100 |                   
 _index.ts |     100 |      100 |     100 |     100 |                   `;
+
+export const simpleDetailsExpectation = `_index.ts |     100 |      100 |     100 |     100 |                   `;

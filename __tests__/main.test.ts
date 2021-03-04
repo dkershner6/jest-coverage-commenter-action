@@ -1,6 +1,6 @@
 // eslint-disable-next-line import/no-namespace
 import * as core from '@actions/core';
-import { simpleCoverage, simpleExpectation } from '../__mocks__/coverage';
+import { simpleCoverage, simpleDetailsExpectation } from '../__mocks__/coverage';
 import runTasks from '../src/runTasks';
 import {
     NO_TOKEN_FAIL_MESSAGE,
@@ -36,7 +36,7 @@ describe('Main Tests', () => {
         await runTasks(getInput, execSync, false);
 
         expect(execSync).toHaveBeenCalledWith(TEST_COMMAND);
-        expect(debugSpy).toHaveBeenCalledWith(simpleExpectation);
+        expect(debugSpy).toHaveBeenCalledWith(simpleDetailsExpectation);
         expect(setFailedSpy).not.toHaveBeenCalled();
     });
 
@@ -54,7 +54,7 @@ describe('Main Tests', () => {
         await runTasks(getInput, execSync, false);
 
         expect(execSync).toHaveBeenCalledWith(DEFAULT_TEST_COMMAND);
-        expect(debugSpy).toHaveBeenCalledWith(simpleExpectation);
+        expect(debugSpy).toHaveBeenCalledWith(simpleDetailsExpectation);
         expect(setFailedSpy).not.toHaveBeenCalled();
     });
 
