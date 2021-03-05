@@ -3,14 +3,16 @@ import { execSync as execSyncImport } from 'child_process';
 
 export interface FormattedCoverage {
     summary?: string;
-    details: string;
+    details?: string;
 }
 
 const A_BUNCH_OF_DASHES = '----------';
+const A_BUNCH_OF_EQUALS = '==========';
 export const JEST_ERROR_MESSAGE = 'There was an error while running Jest.';
 
 const runJest = (
     testCommand: string,
+    reporter: string,
     execSyncParam?: (command: string) => Buffer
 ): FormattedCoverage => {
     try {
@@ -18,11 +20,10 @@ const runJest = (
 
         const codeCoverage = execSync(testCommand).toString();
         try {
-            const codeCoverageLines = codeCoverage.split('\n');
-
-            const formattedCoverage = formatResponse(codeCoverageLines);
-            debug(formattedCoverage.details);
-            return formattedCoverage;
+            if (reporter === 'text-summary') {
+                return processTextSummaryReporter(codeCoverage);
+            }
+            return processTextReporter(codeCoverage);
         } catch (innerError) {
             warning(
                 "Something went wrong with formatting the message, returning the entire text instead. Perhaps you didn't run Jest with --coverage?"
@@ -39,7 +40,43 @@ ${codeCoverage}
     }
 };
 
-const formatResponse = (codeCoverageLines: string[]): FormattedCoverage => {
+const processTextSummaryReporter = (
+    codeCoverage: string
+): FormattedCoverage => {
+    const result = [];
+    const codeCoverageLines = codeCoverage.split('\n');
+    let foundBeginning = false;
+
+    for (const codeCoverageLine of codeCoverageLines) {
+        if (foundBeginning) {
+            result.push(codeCoverageLine);
+        }
+        if (codeCoverageLine.startsWith(A_BUNCH_OF_EQUALS)) {
+            if (foundBeginning) break;
+            foundBeginning = true;
+            result.push(codeCoverageLine);
+        }
+    }
+    const joinedResult = result.join('\n');
+    debug(joinedResult);
+    return {
+        summary: `\`\`\`
+${joinedResult}
+\`\`\``,
+    };
+};
+
+const processTextReporter = (codeCoverage: string): FormattedCoverage => {
+    const codeCoverageLines = codeCoverage.split('\n');
+
+    const formattedCoverage = formatTextReporterResponse(codeCoverageLines);
+    debug(formattedCoverage.details);
+    return formattedCoverage;
+};
+
+const formatTextReporterResponse = (
+    codeCoverageLines: string[]
+): FormattedCoverage => {
     const summaryResult = [];
     const result = [];
     let tableStarted = false;

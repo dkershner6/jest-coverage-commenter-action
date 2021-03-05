@@ -9,6 +9,10 @@ inputs:
     description: 'The test command to run, that also runs coverage appropriately'
     default: 'npx jest --coverage'
     required: false
+  reporter:
+    description: 'Possible types: text, text-summary. Set your --coverageReporters to match.'
+    default: 'text'
+    required: false
 runs:
   using: 'node12'
   main: 'dist/index.js'

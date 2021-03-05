@@ -1,6 +1,6 @@
 {
   "name": "jest-coverage-commenter-action",
-  "version": "1.1.5",
+  "version": "1.2.0",
   "private": true,
   "description": "Comment on PRs with Jest Coverage",
   "main": "lib/src/main.js",
@@ -12,6 +12,7 @@
     "pack": "ncc build",
     "test": "jest",
     "test:coverage": "jest --coverage",
+    "test:coverage-summary": "jest --coverage --coverageReporters=text-summary",
     "all": "npm run build && npm run format && npm run lint && npm run pack && npm test"
   },
   "repository": {

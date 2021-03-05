@@ -28,7 +28,8 @@ jobs:
         id: jest-coverage-commenter-action
         with:
           github_token: "${{ secrets.GITHUB_TOKEN }}"
-          test_command: "npm run test:coverage"
+          test_command: "npm run test:coverage-summary"
+          reporter: 'text-summary'
   other-checks:
     runs-on: ubuntu-latest
     steps:

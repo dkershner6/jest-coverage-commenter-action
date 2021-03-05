@@ -1,3 +1,4 @@
+/* istanbul ignore file */
 import { error, setFailed, info } from '@actions/core';
 import { getOctokit as getOctokitImport, context } from '@actions/github';
 import { Octokit } from '@octokit/core';
@@ -40,13 +41,17 @@ const postComment = async (
 
         const commentBody = `${COMMENT_PREFIX}
 
-${formattedCoverage?.summary ? formattedCoverage.summary : null}
+${formattedCoverage?.summary ? formattedCoverage.summary : ''}
 
-<details>\n\n
+${
+    formattedCoverage?.details
+        ? `<details>\n\n
 
 ${formattedCoverage.details}
 
-\n\n</details>`;
+\n\n</details>`
+        : ''
+}`;
 
         info(`Comment to post:
 ${commentBody}`);
