@@ -43,11 +43,15 @@ const postComment = async (
 
 ${formattedCoverage?.summary ? formattedCoverage.summary : null}
 
-<details>\n\n
+${
+    formattedCoverage?.details
+        ? `<details>\n\n
 
 ${formattedCoverage.details}
 
-\n\n</details>`;
+\n\n</details>`
+        : null
+}`;
 
         info(`Comment to post:
 ${commentBody}`);
