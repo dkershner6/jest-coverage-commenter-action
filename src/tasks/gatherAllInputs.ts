@@ -8,11 +8,15 @@ import {
 export interface IInputs {
     githubToken: string;
     testCommand: string;
+    reporter: string;
 }
 
 export const NO_TOKEN_FAIL_MESSAGE =
     'No github token provided (input: github_token)';
 export const DEFAULT_TEST_COMMAND = 'npx jest --coverage';
+export const DEFAULT_REPORTER = 'text';
+
+export const POSSIBLE_REPORTERS = ['text', 'text-summary'];
 
 const gatherAllInputs = (
     getInputParam: (key: string) => string
@@ -32,9 +36,19 @@ const gatherAllInputs = (
         );
         debug(`Input - test_command: ${testCommand}`);
 
+        const reporter = determineValue(
+            [getInput('reporter')],
+            DEFAULT_REPORTER
+        );
+        debug(`Input - reporter: ${reporter}`);
+        if (!POSSIBLE_REPORTERS.includes(reporter)) {
+            throw new Error('Invalid reporter');
+        }
+
         return {
             githubToken,
             testCommand,
+            reporter,
         };
     } catch (err) {
         error('There was an error while gathering inputs');

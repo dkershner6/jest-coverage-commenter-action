@@ -1,8 +1,6 @@
 # Jest Coverage Commenter GitHub Action
 
-GitHub Action to create a PR comment detailing how well test files are covering code. You can run whatever test command you want, but make sure it returns the table jest usually does into the console.
-
-**Pro tip:** The argument `--changedSince=origin/master` will allow you to only run coverages on the files changed in the PR (change `origin/master` to whatever base branch you are using). Just ensure you also add `fetch-depth: 0` to your checkout (example below).
+GitHub Action to create a PR comment detailing how well test files are covering code. You can run whatever test command you want, but make sure it uses the coverage reporter to match your reporter input (see below).
 
 ## Usage
 
@@ -12,6 +10,7 @@ GitHub Action to create a PR comment detailing how well test files are covering 
 |-----|---------|----------|-------------|
 | github_token | n/a | true | A GitHub Token, the standard one is great. |
 | test_command | `npx jest --coverage` | false | The test command to run, that also runs coverage appropriately |
+| reporter | `text` | false | Possible types: text, text-summary. Set your --coverageReporters to match. |
 
 ### Outputs
 

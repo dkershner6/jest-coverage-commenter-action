@@ -1,3 +1,4 @@
+/* istanbul ignore file */
 import { error, setFailed, info } from '@actions/core';
 import { getOctokit as getOctokitImport, context } from '@actions/github';
 import { Octokit } from '@octokit/core';

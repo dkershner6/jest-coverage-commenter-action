@@ -16,10 +16,10 @@ const runTasks = async (
         if (!inputs) {
             return;
         }
-        const { githubToken, testCommand } = inputs;
+        const { githubToken, testCommand, reporter } = inputs;
         info('Inputs have been gathered');
 
-        const formattedCoverage = runJest(testCommand, execSyncParam);
+        const formattedCoverage = runJest(testCommand, reporter, execSyncParam);
         info('Jest has been ran and coverage collected');
         if (!formattedCoverage || !actuallyPostComment) {
             return;

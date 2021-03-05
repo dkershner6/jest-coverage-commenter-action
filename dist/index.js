@@ -633,14 +633,14 @@ const runTasks = (getInputParam, execSyncParam, actuallyPostComment = true) => _
         if (!inputs) {
             return;
         }
-        const { githubToken, testCommand } = inputs;
+        const { githubToken, testCommand, reporter } = inputs;
         core_1.info('Inputs have been gathered');
-        const commentToPost = runJest_1.default(testCommand, execSyncParam);
+        const formattedCoverage = runJest_1.default(testCommand, reporter, execSyncParam);
         core_1.info('Jest has been ran and coverage collected');
-        if (!commentToPost || !actuallyPostComment) {
+        if (!formattedCoverage || !actuallyPostComment) {
             return;
         }
-        yield postComment_1.default(commentToPost, githubToken);
+        yield postComment_1.default(formattedCoverage, githubToken);
         core_1.info('Comment has been posted to the PR');
     }
     catch (err) {
@@ -1570,22 +1570,25 @@ exports.JEST_ERROR_MESSAGE = void 0;
 const core_1 = __webpack_require__(470);
 const child_process_1 = __webpack_require__(129);
 const A_BUNCH_OF_DASHES = '----------';
+const A_BUNCH_OF_EQUALS = '==========';
 exports.JEST_ERROR_MESSAGE = 'There was an error while running Jest.';
-const runJest = (testCommand, execSyncParam) => {
+const runJest = (testCommand, reporter, execSyncParam) => {
     try {
         const execSync = execSyncParam !== null && execSyncParam !== void 0 ? execSyncParam : child_process_1.execSync;
         const codeCoverage = execSync(testCommand).toString();
         try {
-            const codeCoverageLines = codeCoverage.split('\n');
-            const formattedCoverage = formatResponse(codeCoverageLines);
-            core_1.debug(formattedCoverage);
-            return formattedCoverage;
+            if (reporter === 'text-summary') {
+                return processTextSummaryReporter(codeCoverage);
+            }
+            return processTextReporter(codeCoverage);
         }
         catch (innerError) {
             core_1.warning("Something went wrong with formatting the message, returning the entire text instead. Perhaps you didn't run Jest with --coverage?");
-            return `\`\`\`
+            return {
+                details: `\`\`\`
 ${codeCoverage}
-\`\`\``;
+\`\`\``,
+            };
         }
     }
     catch (err) {
@@ -1593,7 +1596,37 @@ ${codeCoverage}
         throw err;
     }
 };
-const formatResponse = (codeCoverageLines) => {
+const processTextSummaryReporter = (codeCoverage) => {
+    const result = [];
+    const codeCoverageLines = codeCoverage.split('\n');
+    let foundBeginning = false;
+    for (const codeCoverageLine of codeCoverageLines) {
+        if (foundBeginning) {
+            result.push(codeCoverageLine);
+        }
+        if (codeCoverageLine.startsWith(A_BUNCH_OF_EQUALS)) {
+            if (foundBeginning)
+                break;
+            foundBeginning = true;
+            result.push(codeCoverageLine);
+        }
+    }
+    const joinedResult = result.join('\n');
+    core_1.debug(joinedResult);
+    return {
+        summary: `\`\`\`
+${joinedResult}
+\`\`\``,
+    };
+};
+const processTextReporter = (codeCoverage) => {
+    const codeCoverageLines = codeCoverage.split('\n');
+    const formattedCoverage = formatTextReporterResponse(codeCoverageLines);
+    core_1.debug(formattedCoverage.details);
+    return formattedCoverage;
+};
+const formatTextReporterResponse = (codeCoverageLines) => {
+    const summaryResult = [];
     const result = [];
     let tableStarted = false;
     let linesSinceTableStarted = 0;
@@ -1609,9 +1642,12 @@ const formatResponse = (codeCoverageLines) => {
         if (linesSinceTableStarted > 2 && line.startsWith(A_BUNCH_OF_DASHES)) {
             continue;
         }
+        if (linesSinceTableStarted <= 3) {
+            summaryResult.push(line.replace(/^ /gm, '_'));
+        }
         result.push(line.replace(/^ /gm, '_'));
     }
-    return result.join('\n');
+    return { summary: summaryResult.join('\n'), details: result.join('\n') };
 };
 exports.default = runJest;
 
@@ -2169,7 +2205,7 @@ function escapeProperty(s) {
 /***/ 439:
 /***/ (function(module) {
 
-module.exports = {"name":"jest-coverage-commenter-action","version":"1.1.4","private":true,"description":"Comment on PRs with Jest Coverage","main":"lib/src/main.js","scripts":{"build":"tsc","format":"prettier --write **/*.ts","format-check":"prettier --check **/*.ts","lint":"eslint src/**/*.ts","pack":"ncc build","test":"jest","test:coverage":"jest --coverage --changedSince=origin/master","all":"npm run build && npm run format && npm run lint && npm run pack && npm test"},"repository":{"type":"git","url":"git+https://github.com/actions/typescript-action.git"},"keywords":["actions","node","setup"],"author":"Derek Kershner","license":"MIT","dependencies":{"@actions/core":"^1.2.4","@actions/github":"^3.0.0"},"devDependencies":{"@types/jest":"^26.0.0","@types/node":"^14.0.13","@typescript-eslint/parser":"^3.2.0","@zeit/ncc":"^0.22.3","cross-env":"^7.0.2","eslint":"^7.2.0","eslint-plugin-github":"^4.0.1","eslint-plugin-jest":"^23.13.2","jest":"^26.0.1","jest-circus":"^26.0.1","js-yaml":"^3.14.0","prettier":"^2.0.5","ts-jest":"^26.1.0","typescript":"^3.9.5"}};
+module.exports = {"name":"jest-coverage-commenter-action","version":"1.2.0","private":true,"description":"Comment on PRs with Jest Coverage","main":"lib/src/main.js","scripts":{"build":"tsc","format":"prettier --write **/*.ts","format-check":"prettier --check **/*.ts","lint":"eslint src/**/*.ts","pack":"ncc build","test":"jest","test:coverage":"jest --coverage","test:coverage-summary":"jest --coverage --coverageReporters=text-summary","all":"npm run build && npm run format && npm run lint && npm run pack && npm test"},"repository":{"type":"git","url":"git+https://github.com/actions/typescript-action.git"},"keywords":["actions","node","setup"],"author":"Derek Kershner","license":"MIT","dependencies":{"@actions/core":"^1.2.4","@actions/github":"^3.0.0"},"devDependencies":{"@types/jest":"^26.0.0","@types/node":"^14.0.13","@typescript-eslint/parser":"^3.2.0","@zeit/ncc":"^0.22.3","cross-env":"^7.0.2","eslint":"^7.2.0","eslint-plugin-github":"^4.0.1","eslint-plugin-jest":"^23.13.2","jest":"^26.0.1","jest-circus":"^26.0.1","js-yaml":"^3.14.0","prettier":"^2.0.5","ts-jest":"^26.1.0","typescript":"^3.9.5"}};
 
 /***/ }),
 
@@ -7064,10 +7100,11 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.COMMENT_PREFIX = void 0;
+/* istanbul ignore file */
 const core_1 = __webpack_require__(470);
 const github_1 = __webpack_require__(469);
 exports.COMMENT_PREFIX = '## Jest Coverage';
-const postComment = (commentToPost, githubToken, getOctokitParam) => __awaiter(void 0, void 0, void 0, function* () {
+const postComment = (formattedCoverage, githubToken, getOctokitParam) => __awaiter(void 0, void 0, void 0, function* () {
     var _a, _b, _c, _d;
     try {
         const prNumber = (_a = github_1.context === null || github_1.context === void 0 ? void 0 : github_1.context.issue) === null || _a === void 0 ? void 0 : _a.number;
@@ -7091,9 +7128,11 @@ const postComment = (commentToPost, githubToken, getOctokitParam) => __awaiter(v
         });
         const commentBody = `${exports.COMMENT_PREFIX}
 
+${(formattedCoverage === null || formattedCoverage === void 0 ? void 0 : formattedCoverage.summary) ? formattedCoverage.summary : null}
+
 <details>\n\n
 
-${commentToPost}
+${formattedCoverage.details}
 
 \n\n</details>`;
         core_1.info(`Comment to post:
@@ -9475,10 +9514,12 @@ function removeHook (state, name, method) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.DEFAULT_TEST_COMMAND = exports.NO_TOKEN_FAIL_MESSAGE = void 0;
+exports.POSSIBLE_REPORTERS = exports.DEFAULT_REPORTER = exports.DEFAULT_TEST_COMMAND = exports.NO_TOKEN_FAIL_MESSAGE = void 0;
 const core_1 = __webpack_require__(470);
 exports.NO_TOKEN_FAIL_MESSAGE = 'No github token provided (input: github_token)';
 exports.DEFAULT_TEST_COMMAND = 'npx jest --coverage';
+exports.DEFAULT_REPORTER = 'text';
+exports.POSSIBLE_REPORTERS = ['text', 'text-summary'];
 const gatherAllInputs = (getInputParam) => {
     try {
         const getInput = getInputParam !== null && getInputParam !== void 0 ? getInputParam : core_1.getInput;
@@ -9489,9 +9530,15 @@ const gatherAllInputs = (getInputParam) => {
         }
         const testCommand = determineValue([getInput('test_command')], exports.DEFAULT_TEST_COMMAND);
         core_1.debug(`Input - test_command: ${testCommand}`);
+        const reporter = determineValue([getInput('reporter')], exports.DEFAULT_REPORTER);
+        core_1.debug(`Input - reporter: ${reporter}`);
+        if (!exports.POSSIBLE_REPORTERS.includes(reporter)) {
+            throw new Error('Invalid reporter');
+        }
         return {
             githubToken,
             testCommand,
+            reporter,
         };
     }
     catch (err) {
