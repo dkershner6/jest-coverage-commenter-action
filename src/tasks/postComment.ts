@@ -41,7 +41,7 @@ const postComment = async (
 
         const commentBody = `${COMMENT_PREFIX}
 
-${formattedCoverage?.summary ? formattedCoverage.summary : null}
+${formattedCoverage?.summary ? formattedCoverage.summary : ''}
 
 ${
     formattedCoverage?.details
@@ -50,7 +50,7 @@ ${
 ${formattedCoverage.details}
 
 \n\n</details>`
-        : null
+        : ''
 }`;
 
         info(`Comment to post:
