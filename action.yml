@@ -13,6 +13,10 @@ inputs:
     description: 'Possible types: text, text-summary. Set your --coverageReporters to match.'
     default: 'text'
     required: false
+  comment_author:
+    description: 'The author of the comment, for public repoitories the author would be Bot however for coorperate corporate accounts it is different per account.'
+    default: 'Bot'
+    required: false
 runs:
   using: 'node12'
   main: 'dist/index.js'

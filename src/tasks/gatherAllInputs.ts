@@ -9,12 +9,14 @@ export interface IInputs {
     githubToken: string;
     testCommand: string;
     reporter: string;
+    comment_author: string;
 }
 
 export const NO_TOKEN_FAIL_MESSAGE =
     'No github token provided (input: github_token)';
 export const DEFAULT_TEST_COMMAND = 'npx jest --coverage';
 export const DEFAULT_REPORTER = 'text';
+export const DEFAULT_COMMENT_AUTHOR = 'Bot';
 
 export const POSSIBLE_REPORTERS = ['text', 'text-summary'];
 
@@ -45,10 +47,17 @@ const gatherAllInputs = (
             throw new Error('Invalid reporter');
         }
 
+        const comment_author = determineValue(
+            [getInput('comment_author')],
+            DEFAULT_COMMENT_AUTHOR
+        );
+        debug(`Input - comment_author: ${comment_author}`);
+
         return {
             githubToken,
             testCommand,
             reporter,
+            comment_author,
         };
     } catch (err) {
         error('There was an error while gathering inputs');
