@@ -1,13 +1,14 @@
 import { info, error, setFailed } from '@actions/core';
 import gatherAllInputs from './tasks/gatherAllInputs';
 import runJest from './tasks/runJest';
-import postComment from './tasks/postComment';
+import postCommentImport from './tasks/postComment';
 
 import packageJson from '../package.json';
 
 const runTasks = async (
     getInputParam?: (key: string) => string,
     execSyncParam?: (command: string) => Buffer,
+    postComment = postCommentImport,
     actuallyPostComment = true
 ): Promise<void> => {
     try {
