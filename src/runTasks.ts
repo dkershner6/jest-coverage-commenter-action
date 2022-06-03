@@ -1,14 +1,14 @@
 import { info, error, setFailed } from '@actions/core';
 import gatherAllInputs from './tasks/gatherAllInputs';
 import runJest from './tasks/runJest';
-import postComment from './tasks/postComment';
+import postCommentImport from './tasks/postComment';
 
 import packageJson from '../package.json';
 
 const runTasks = async (
     getInputParam?: (key: string) => string,
     execSyncParam?: (command: string) => Buffer,
-    actuallyPostComment = true
+    postComment = postCommentImport
 ): Promise<void> => {
     try {
         info(`Jest Coverage Commenter v${packageJson.version}`);
@@ -21,7 +21,7 @@ const runTasks = async (
 
         const formattedCoverage = runJest(testCommand, reporter, execSyncParam);
         info('Jest has been ran and coverage collected');
-        if (!formattedCoverage || !actuallyPostComment) {
+        if (!formattedCoverage) {
             return;
         }
         await postComment(formattedCoverage, githubToken);

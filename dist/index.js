@@ -319,7 +319,7 @@ const gatherAllInputs_1 = __importDefault(__webpack_require__(874));
 const runJest_1 = __importDefault(__webpack_require__(349));
 const postComment_1 = __importDefault(__webpack_require__(690));
 const package_json_1 = __importDefault(__webpack_require__(439));
-const runTasks = (getInputParam, execSyncParam, actuallyPostComment = true) => __awaiter(void 0, void 0, void 0, function* () {
+const runTasks = (getInputParam, execSyncParam, postComment = postComment_1.default) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         core_1.info(`Jest Coverage Commenter v${package_json_1.default.version}`);
         const inputs = gatherAllInputs_1.default(getInputParam);
@@ -330,10 +330,10 @@ const runTasks = (getInputParam, execSyncParam, actuallyPostComment = true) => _
         core_1.info('Inputs have been gathered');
         const formattedCoverage = runJest_1.default(testCommand, reporter, execSyncParam);
         core_1.info('Jest has been ran and coverage collected');
-        if (!formattedCoverage || !actuallyPostComment) {
+        if (!formattedCoverage) {
             return;
         }
-        yield postComment_1.default(formattedCoverage, githubToken);
+        yield postComment(formattedCoverage, githubToken);
         core_1.info('Comment has been posted to the PR');
     }
     catch (err) {
@@ -4497,10 +4497,7 @@ const postComment = (formattedCoverage, githubToken, getOctokitParam) => __await
             repo,
             owner,
         });
-        const existingComment = (_d = prComments === null || prComments === void 0 ? void 0 : prComments.data) === null || _d === void 0 ? void 0 : _d.find((comment) => {
-            var _a, _b;
-            return ((_a = comment === null || comment === void 0 ? void 0 : comment.user) === null || _a === void 0 ? void 0 : _a.type) === 'Bot' && ((_b = comment === null || comment === void 0 ? void 0 : comment.body) === null || _b === void 0 ? void 0 : _b.startsWith(exports.COMMENT_PREFIX));
-        });
+        const existingComment = (_d = prComments === null || prComments === void 0 ? void 0 : prComments.data) === null || _d === void 0 ? void 0 : _d.find((comment) => { var _a; return (_a = comment === null || comment === void 0 ? void 0 : comment.body) === null || _a === void 0 ? void 0 : _a.startsWith(exports.COMMENT_PREFIX); });
         const commentBody = `${exports.COMMENT_PREFIX}
 
 ${(formattedCoverage === null || formattedCoverage === void 0 ? void 0 : formattedCoverage.summary) ? formattedCoverage.summary : ''}

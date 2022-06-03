@@ -34,8 +34,7 @@ const postComment = async (
         });
 
         const existingComment = prComments?.data?.find(
-            (comment: { user: { type: string }; body: string }) =>
-                comment?.user?.type === 'Bot' &&
+            (comment: { body: string }) =>
                 comment?.body?.startsWith(COMMENT_PREFIX)
         );
 
