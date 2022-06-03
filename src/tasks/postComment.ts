@@ -9,7 +9,6 @@ export const COMMENT_PREFIX = '## Jest Coverage';
 const postComment = async (
     formattedCoverage: FormattedCoverage,
     githubToken: string,
-    comment_author: string,
     getOctokitParam?: (token: string) => Octokit
 ): Promise<void> => {
     try {
@@ -35,8 +34,7 @@ const postComment = async (
         });
 
         const existingComment = prComments?.data?.find(
-            (comment: { user: { type: string }; body: string }) =>
-                comment?.user?.type === comment_author &&
+            (comment: { body: string }) =>
                 comment?.body?.startsWith(COMMENT_PREFIX)
         );
 

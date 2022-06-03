@@ -10,7 +10,6 @@ import runTasks from '../src/runTasks';
 import {
     NO_TOKEN_FAIL_MESSAGE,
     DEFAULT_TEST_COMMAND,
-    DEFAULT_COMMENT_AUTHOR,
 } from '../src/tasks/gatherAllInputs';
 import { JEST_ERROR_MESSAGE } from '../src/tasks/runJest';
 
@@ -18,11 +17,11 @@ describe('Main Tests', () => {
     const GITHUB_TOKEN = '12345';
     const TEST_COMMAND = 'npm run test --coverage';
     const TEST_COMMAND_SUMMARY = 'npm run test:coverage-summary';
-    const COMMENT_AUTHOR = 'some-author';
 
     const debugSpy = jest.spyOn(core, 'debug');
     const errorSpy = jest.spyOn(core, 'error');
     const setFailedSpy = jest.spyOn(core, 'setFailed');
+    const postCommentMock = jest.fn();
 
     afterEach(() => {
         jest.resetAllMocks();
@@ -41,7 +40,7 @@ describe('Main Tests', () => {
                     return '';
             }
         });
-        await runTasks(getInput, execSync, jest.fn(), false);
+        await runTasks(getInput, execSync, postCommentMock);
 
         expect(execSync).toHaveBeenCalledWith(TEST_COMMAND);
         expect(debugSpy).toHaveBeenCalledWith(simpleExpectation);
@@ -63,7 +62,7 @@ describe('Main Tests', () => {
                     return '';
             }
         });
-        await runTasks(getInput, execSync, jest.fn(), false);
+        await runTasks(getInput, execSync, postCommentMock);
 
         expect(execSync).toHaveBeenCalledWith(TEST_COMMAND_SUMMARY);
         expect(debugSpy).toHaveBeenCalledWith(textSummaryExpectation);
@@ -81,39 +80,15 @@ describe('Main Tests', () => {
                     return '';
             }
         });
-        await runTasks(getInput, execSync, jest.fn(), false);
+        await runTasks(getInput, execSync, postCommentMock);
 
         expect(execSync).toHaveBeenCalledWith(DEFAULT_TEST_COMMAND);
         expect(debugSpy).toHaveBeenCalledWith(simpleExpectation);
         expect(setFailedSpy).not.toHaveBeenCalled();
     });
 
-    it('Should call postComment with correct commentAuthor if given', async () => {
-        const postComment = jest.fn();
+    it('Should post a comment with returned formattedCoverage', async () => {
         const execSync = jest.fn().mockReturnValue(simpleCoverage);
-        const getInput = jest.fn().mockImplementation((key: string) => {
-            switch (key) {
-                case 'github_token':
-                    return GITHUB_TOKEN;
-                case 'comment_author':
-                    return COMMENT_AUTHOR;
-                default:
-                    return '';
-            }
-        });
-        await runTasks(getInput, execSync, postComment);
-
-        expect(postComment).toHaveBeenCalledWith(
-            expect.objectContaining({ details: simpleExpectation }),
-            expect.stringMatching(GITHUB_TOKEN),
-            expect.stringMatching(COMMENT_AUTHOR)
-        );
-        expect(setFailedSpy).not.toHaveBeenCalled();
-    });
-
-    it('Should call postComment with default comment author if none given', async () => {
-        const execSync = jest.fn().mockReturnValue(simpleCoverage);
-        const postComment = jest.fn();
         const getInput = jest.fn().mockImplementation((key: string) => {
             switch (key) {
                 case 'github_token':
@@ -124,12 +99,11 @@ describe('Main Tests', () => {
                     return '';
             }
         });
-        await runTasks(getInput, execSync, postComment);
+        await runTasks(getInput, execSync, postCommentMock);
 
-        expect(postComment).toHaveBeenCalledWith(
+        expect(postCommentMock).toHaveBeenCalledWith(
             expect.objectContaining({ details: simpleExpectation }),
-            expect.stringMatching(GITHUB_TOKEN),
-            expect.stringMatching(DEFAULT_COMMENT_AUTHOR)
+            expect.stringMatching(GITHUB_TOKEN)
         );
         expect(setFailedSpy).not.toHaveBeenCalled();
     });
@@ -145,7 +119,7 @@ describe('Main Tests', () => {
                     return '';
             }
         });
-        await runTasks(getInput, execSync, jest.fn(), false);
+        await runTasks(getInput, execSync, postCommentMock);
 
         expect(setFailedSpy).toHaveBeenCalledWith(NO_TOKEN_FAIL_MESSAGE);
     });
@@ -165,7 +139,7 @@ describe('Main Tests', () => {
                     return '';
             }
         });
-        await runTasks(getInput, execSync, jest.fn(), false);
+        await runTasks(getInput, execSync, postCommentMock);
 
         expect(errorSpy).toHaveBeenCalledWith(JEST_ERROR_MESSAGE);
         expect(setFailedSpy).toHaveBeenCalledWith('Jest Failed');

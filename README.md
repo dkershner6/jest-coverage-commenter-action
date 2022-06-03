@@ -11,7 +11,6 @@ GitHub Action to create a PR comment detailing how well test files are covering 
 | github_token | n/a | true | A GitHub Token, the standard one is great. |
 | test_command | `npx jest --coverage` | false | The test command to run, that also runs coverage appropriately |
 | reporter | `text` | false | Possible types: `text`, `text-summary`. Set your `--coverageReporters` to match. `text-summary` should be used on large projects. |
-| comment_author | `Bot` | false | The author of the comment, for public repoitories the author would be Bot however for corporate accounts it is different per account. |
 
 ### Outputs
 
