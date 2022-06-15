@@ -42,7 +42,7 @@ const gatherAllInputs = (
             getInput('comment_prefix'),
             DEFAULT_COMMENT_PREFIX,
         ]);
-        debug(`Input - comment_prfix: ${commentPrefix}`);
+        debug(`Input - comment_prefix: ${commentPrefix}`);
 
         const reporter = determineValue(
             [getInput('reporter')],
