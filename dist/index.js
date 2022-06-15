@@ -326,14 +326,14 @@ const runTasks = (getInputParam, execSyncParam, postComment = postComment_1.defa
         if (!inputs) {
             return;
         }
-        const { githubToken, testCommand, reporter } = inputs;
+        const { githubToken, testCommand, reporter, commentPrefix } = inputs;
         core_1.info('Inputs have been gathered');
         const formattedCoverage = runJest_1.default(testCommand, reporter, execSyncParam);
         core_1.info('Jest has been ran and coverage collected');
         if (!formattedCoverage) {
             return;
         }
-        yield postComment(formattedCoverage, githubToken);
+        yield postComment(formattedCoverage, githubToken, commentPrefix);
         core_1.info('Comment has been posted to the PR');
     }
     catch (err) {
@@ -4474,12 +4474,10 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.COMMENT_PREFIX = void 0;
 /* istanbul ignore file */
 const core_1 = __webpack_require__(470);
 const github_1 = __webpack_require__(469);
-exports.COMMENT_PREFIX = '## Jest Coverage';
-const postComment = (formattedCoverage, githubToken, getOctokitParam) => __awaiter(void 0, void 0, void 0, function* () {
+const postComment = (formattedCoverage, githubToken, commentPrefix, getOctokitParam) => __awaiter(void 0, void 0, void 0, function* () {
     var _a, _b, _c, _d;
     try {
         const prNumber = (_a = github_1.context === null || github_1.context === void 0 ? void 0 : github_1.context.issue) === null || _a === void 0 ? void 0 : _a.number;
@@ -4497,8 +4495,8 @@ const postComment = (formattedCoverage, githubToken, getOctokitParam) => __await
             repo,
             owner,
         });
-        const existingComment = (_d = prComments === null || prComments === void 0 ? void 0 : prComments.data) === null || _d === void 0 ? void 0 : _d.find((comment) => { var _a; return (_a = comment === null || comment === void 0 ? void 0 : comment.body) === null || _a === void 0 ? void 0 : _a.startsWith(exports.COMMENT_PREFIX); });
-        const commentBody = `${exports.COMMENT_PREFIX}
+        const existingComment = (_d = prComments === null || prComments === void 0 ? void 0 : prComments.data) === null || _d === void 0 ? void 0 : _d.find((comment) => { var _a; return (_a = comment === null || comment === void 0 ? void 0 : comment.body) === null || _a === void 0 ? void 0 : _a.startsWith(commentPrefix); });
+        const commentBody = `${commentPrefix}
 
 ${(formattedCoverage === null || formattedCoverage === void 0 ? void 0 : formattedCoverage.summary) ? formattedCoverage.summary : ''}
 
@@ -6091,11 +6089,12 @@ function removeHook(state, name, method) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.POSSIBLE_REPORTERS = exports.DEFAULT_REPORTER = exports.DEFAULT_TEST_COMMAND = exports.NO_TOKEN_FAIL_MESSAGE = void 0;
+exports.POSSIBLE_REPORTERS = exports.DEFAULT_COMMENT_PREFIX = exports.DEFAULT_REPORTER = exports.DEFAULT_TEST_COMMAND = exports.NO_TOKEN_FAIL_MESSAGE = void 0;
 const core_1 = __webpack_require__(470);
 exports.NO_TOKEN_FAIL_MESSAGE = 'No github token provided (input: github_token)';
 exports.DEFAULT_TEST_COMMAND = 'npx jest --coverage';
 exports.DEFAULT_REPORTER = 'text';
+exports.DEFAULT_COMMENT_PREFIX = '## Jest Coverage';
 exports.POSSIBLE_REPORTERS = ['text', 'text-summary'];
 const gatherAllInputs = (getInputParam) => {
     try {
@@ -6107,6 +6106,11 @@ const gatherAllInputs = (getInputParam) => {
         }
         const testCommand = determineValue([getInput('test_command')], exports.DEFAULT_TEST_COMMAND);
         core_1.debug(`Input - test_command: ${testCommand}`);
+        const commentPrefix = determineValue([
+            getInput('comment_prefix'),
+            exports.DEFAULT_COMMENT_PREFIX,
+        ]);
+        core_1.debug(`Input - comment_prefix: ${commentPrefix}`);
         const reporter = determineValue([getInput('reporter')], exports.DEFAULT_REPORTER);
         core_1.debug(`Input - reporter: ${reporter}`);
         if (!exports.POSSIBLE_REPORTERS.includes(reporter)) {
@@ -6116,6 +6120,7 @@ const gatherAllInputs = (getInputParam) => {
             githubToken,
             testCommand,
             reporter,
+            commentPrefix,
         };
     }
     catch (err) {
