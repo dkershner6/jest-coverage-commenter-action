@@ -9,12 +9,14 @@ export interface IInputs {
     githubToken: string;
     testCommand: string;
     reporter: string;
+    commentPrefix: string;
 }
 
 export const NO_TOKEN_FAIL_MESSAGE =
     'No github token provided (input: github_token)';
 export const DEFAULT_TEST_COMMAND = 'npx jest --coverage';
 export const DEFAULT_REPORTER = 'text';
+export const DEFAULT_COMMENT_PREFIX = '## Jest Coverage';
 
 export const POSSIBLE_REPORTERS = ['text', 'text-summary'];
 
@@ -36,6 +38,12 @@ const gatherAllInputs = (
         );
         debug(`Input - test_command: ${testCommand}`);
 
+        const commentPrefix = determineValue([
+            getInput('comment_prefix'),
+            DEFAULT_COMMENT_PREFIX,
+        ]);
+        debug(`Input - comment_prefix: ${commentPrefix}`);
+
         const reporter = determineValue(
             [getInput('reporter')],
             DEFAULT_REPORTER
@@ -49,6 +57,7 @@ const gatherAllInputs = (
             githubToken,
             testCommand,
             reporter,
+            commentPrefix,
         };
     } catch (err) {
         error('There was an error while gathering inputs');

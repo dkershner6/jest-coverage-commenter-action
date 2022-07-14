@@ -4,11 +4,10 @@ import { getOctokit as getOctokitImport, context } from '@actions/github';
 import { Octokit } from '@octokit/core';
 import { FormattedCoverage } from './runJest';
 
-export const COMMENT_PREFIX = '## Jest Coverage';
-
 const postComment = async (
     formattedCoverage: FormattedCoverage,
     githubToken: string,
+    commentPrefix: string,
     getOctokitParam?: (token: string) => Octokit
 ): Promise<void> => {
     try {
@@ -35,10 +34,10 @@ const postComment = async (
 
         const existingComment = prComments?.data?.find(
             (comment: { body: string }) =>
-                comment?.body?.startsWith(COMMENT_PREFIX)
+                comment?.body?.startsWith(commentPrefix)
         );
 
-        const commentBody = `${COMMENT_PREFIX}
+        const commentBody = `${commentPrefix}
 
 ${formattedCoverage?.summary ? formattedCoverage.summary : ''}
 

@@ -13,6 +13,10 @@ inputs:
     description: 'Possible types: text, text-summary. Set your --coverageReporters to match.'
     default: 'text'
     required: false
+  comment_prefix:
+    description: 'A message desired to be shown before the code coverage report'
+    default: '## Jest Coverage'
+    required: false
 runs:
   using: 'node16'
   main: 'dist/index.js'

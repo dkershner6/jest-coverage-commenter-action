@@ -10,6 +10,7 @@ import runTasks from '../src/runTasks';
 import {
     NO_TOKEN_FAIL_MESSAGE,
     DEFAULT_TEST_COMMAND,
+    DEFAULT_COMMENT_PREFIX,
 } from '../src/tasks/gatherAllInputs';
 import { JEST_ERROR_MESSAGE } from '../src/tasks/runJest';
 
@@ -103,7 +104,8 @@ describe('Main Tests', () => {
 
         expect(postCommentMock).toHaveBeenCalledWith(
             expect.objectContaining({ details: simpleExpectation }),
-            expect.stringMatching(GITHUB_TOKEN)
+            expect.stringMatching(GITHUB_TOKEN),
+            expect.stringMatching(DEFAULT_COMMENT_PREFIX)
         );
         expect(setFailedSpy).not.toHaveBeenCalled();
     });
