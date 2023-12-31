@@ -18,7 +18,7 @@ const project = new Node20GitHubActionTypescriptProject({
     description: "Comment on PRs with Jest Coverage",
 
     actionMetadata: {
-        name: "Comment Reaction",
+        name: "Jest Coverage Commenter",
         description: "Comment on PRs with Jest Coverage Information",
         inputs: {
             github_token: {
