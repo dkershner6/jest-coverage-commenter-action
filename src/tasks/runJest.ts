@@ -1,32 +1,32 @@
-import { error, warning, debug } from '@actions/core';
-import { execSync as execSyncImport } from 'child_process';
+import { execSync as execSyncImport } from "child_process";
+import { error, warning, debug } from "@actions/core";
 
 export interface FormattedCoverage {
     summary?: string;
     details?: string;
 }
 
-const A_BUNCH_OF_DASHES = '----------';
-const A_BUNCH_OF_EQUALS = '==========';
-export const JEST_ERROR_MESSAGE = 'There was an error while running Jest.';
+const A_BUNCH_OF_DASHES = "----------";
+const A_BUNCH_OF_EQUALS = "==========";
+export const JEST_ERROR_MESSAGE = "There was an error while running Jest.";
 
 const runJest = (
     testCommand: string,
     reporter: string,
-    execSyncParam?: (command: string) => Buffer
+    execSyncParam?: (command: string) => Buffer,
 ): FormattedCoverage => {
     try {
         const execSync = execSyncParam ?? execSyncImport;
 
         const codeCoverage = execSync(testCommand).toString();
         try {
-            if (reporter === 'text-summary') {
+            if (reporter === "text-summary") {
                 return processTextSummaryReporter(codeCoverage);
             }
             return processTextReporter(codeCoverage);
         } catch (innerError) {
             warning(
-                "Something went wrong with formatting the message, returning the entire text instead. Perhaps you didn't run Jest with --coverage?"
+                "Something went wrong with formatting the message, returning the entire text instead. Perhaps you didn't run Jest with --coverage?",
             );
             return {
                 details: `\`\`\`
@@ -41,10 +41,10 @@ ${codeCoverage}
 };
 
 const processTextSummaryReporter = (
-    codeCoverage: string
+    codeCoverage: string,
 ): FormattedCoverage => {
     const result = [];
-    const codeCoverageLines = codeCoverage.split('\n');
+    const codeCoverageLines = codeCoverage.split("\n");
     let foundBeginning = false;
 
     for (const codeCoverageLine of codeCoverageLines) {
@@ -57,7 +57,7 @@ const processTextSummaryReporter = (
             result.push(codeCoverageLine);
         }
     }
-    const joinedResult = result.join('\n');
+    const joinedResult = result.join("\n");
     debug(joinedResult);
     return {
         summary: `\`\`\`
@@ -67,15 +67,15 @@ ${joinedResult}
 };
 
 const processTextReporter = (codeCoverage: string): FormattedCoverage => {
-    const codeCoverageLines = codeCoverage.split('\n');
+    const codeCoverageLines = codeCoverage.split("\n");
 
     const formattedCoverage = formatTextReporterResponse(codeCoverageLines);
-    debug(formattedCoverage.details);
+    debug(formattedCoverage.details ?? "No Details Present");
     return formattedCoverage;
 };
 
 const formatTextReporterResponse = (
-    codeCoverageLines: string[]
+    codeCoverageLines: string[],
 ): FormattedCoverage => {
     const summaryResult = [];
     const result = [];
@@ -95,12 +95,12 @@ const formatTextReporterResponse = (
             continue;
         }
         if (linesSinceTableStarted <= 3) {
-            summaryResult.push(line.replace(/^ /gm, '_'));
+            summaryResult.push(line.replace(/^ /gm, "_"));
         }
-        result.push(line.replace(/^ /gm, '_'));
+        result.push(line.replace(/^ /gm, "_"));
     }
 
-    return { summary: summaryResult.join('\n'), details: result.join('\n') };
+    return { summary: summaryResult.join("\n"), details: result.join("\n") };
 };
 
 export default runJest;

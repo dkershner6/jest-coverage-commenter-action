@@ -1,15 +1,23 @@
 /* istanbul ignore file */
-import { error, setFailed, info } from '@actions/core';
-import { getOctokit as getOctokitImport, context } from '@actions/github';
-import { Octokit } from '@octokit/core';
-import { FormattedCoverage } from './runJest';
+import { error, setFailed, info } from "@actions/core";
+import { getOctokit as getOctokitImport, context } from "@actions/github";
 
-const postComment = async (
+import { GitHub } from "@actions/github/lib/utils";
+import { FormattedCoverage } from "./runJest";
+
+export type PostComment = (
     formattedCoverage: FormattedCoverage,
     githubToken: string,
     commentPrefix: string,
-    getOctokitParam?: (token: string) => Octokit
-): Promise<void> => {
+    getOctokitParam?: (token: string) => InstanceType<typeof GitHub>,
+) => Promise<void>;
+
+const postComment: PostComment = async (
+    formattedCoverage,
+    githubToken,
+    commentPrefix,
+    getOctokitParam,
+) => {
     try {
         const prNumber = context?.issue?.number;
         const repo = context?.repo?.repo;
@@ -19,27 +27,26 @@ const postComment = async (
             return setFailed(
                 `Was unable to obtain: ${[prNumber, repo, owner]
                     .filter((item) => item === undefined)
-                    .join(', ')} from context.`
+                    .join(", ")} from context.`,
             );
         }
 
         const getOctokit = getOctokitParam ?? getOctokitImport;
         const github = getOctokit(githubToken);
 
-        const prComments = await github.issues.listComments({
+        const prComments = await github.rest.issues.listComments({
             issue_number: prNumber,
             repo,
             owner,
         });
 
         const existingComment = prComments?.data?.find(
-            (comment: { body: string }) =>
-                comment?.body?.startsWith(commentPrefix)
+            (comment) => comment?.body?.startsWith(commentPrefix),
         );
 
         const commentBody = `${commentPrefix}
 
-${formattedCoverage?.summary ? formattedCoverage.summary : ''}
+${formattedCoverage?.summary ? formattedCoverage.summary : ""}
 
 ${
     formattedCoverage?.details
@@ -48,7 +55,7 @@ ${
 ${formattedCoverage.details}
 
 \n\n</details>`
-        : ''
+        : ""
 }`;
 
         info(`Comment to post:
@@ -56,7 +63,7 @@ ${commentBody}`);
 
         if (existingComment?.id) {
             info(`Previous comment found: ${existingComment.id}`);
-            await github.issues.updateComment({
+            await github.rest.issues.updateComment({
                 issue_number: prNumber,
                 comment_id: existingComment.id,
                 repo,
@@ -64,8 +71,8 @@ ${commentBody}`);
                 body: commentBody,
             });
         } else {
-            info('Creating new comment');
-            await github.issues.createComment({
+            info("Creating new comment");
+            await github.rest.issues.createComment({
                 issue_number: prNumber,
                 repo,
                 owner,
@@ -73,7 +80,7 @@ ${commentBody}`);
             });
         }
     } catch (err) {
-        error('There was an error while posting the comment');
+        error("There was an error while posting the comment");
         throw err;
     }
 };
