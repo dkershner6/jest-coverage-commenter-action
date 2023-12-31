@@ -83,6 +83,10 @@
       "type": "build"
     },
     {
+      "name": "projen-nvm",
+      "type": "build"
+    },
+    {
       "name": "standard-version",
       "version": "^9",
       "type": "build"

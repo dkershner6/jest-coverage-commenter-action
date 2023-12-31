@@ -253,13 +253,13 @@
       },
       "steps": [
         {
-          "exec": "pnpx npm-check-updates@16 --upgrade --target=minor --peer --dep=dev,peer,prod,optional --filter=@types/jest,@types/node,@typescript-eslint/eslint-plugin,@typescript-eslint/parser,@vercel/ncc,constructs,dkershner6-projen-github-actions,eslint-config-prettier,eslint-import-resolver-typescript,eslint-plugin-import,eslint-plugin-jest,eslint-plugin-prettier,eslint-plugin-sonarjs,eslint,jest,jest-junit,prettier,projen,projen-github-action-typescript,standard-version,ts-jest,ts-node,typedoc,typescript,@actions/core,@actions/github,@octokit/core,@octokit/rest"
+          "exec": "pnpx npm-check-updates@16 --upgrade --target=minor --peer --dep=dev,peer,prod,optional --filter=@types/jest,@types/node,@typescript-eslint/eslint-plugin,@typescript-eslint/parser,@vercel/ncc,constructs,dkershner6-projen-github-actions,eslint-config-prettier,eslint-import-resolver-typescript,eslint-plugin-import,eslint-plugin-jest,eslint-plugin-prettier,eslint-plugin-sonarjs,eslint,jest,jest-junit,prettier,projen,projen-github-action-typescript,projen-nvm,standard-version,ts-jest,ts-node,typedoc,typescript,@actions/core,@actions/github,@octokit/core,@octokit/rest"
         },
         {
           "exec": "pnpm i --no-frozen-lockfile"
         },
         {
-          "exec": "pnpm update @types/jest @types/node @typescript-eslint/eslint-plugin @typescript-eslint/parser @vercel/ncc constructs dkershner6-projen-github-actions eslint-config-prettier eslint-import-resolver-typescript eslint-plugin-import eslint-plugin-jest eslint-plugin-prettier eslint-plugin-sonarjs eslint jest jest-junit prettier projen projen-github-action-typescript standard-version ts-jest ts-node typedoc typescript @actions/core @actions/github @octokit/core @octokit/rest"
+          "exec": "pnpm update @types/jest @types/node @typescript-eslint/eslint-plugin @typescript-eslint/parser @vercel/ncc constructs dkershner6-projen-github-actions eslint-config-prettier eslint-import-resolver-typescript eslint-plugin-import eslint-plugin-jest eslint-plugin-prettier eslint-plugin-sonarjs eslint jest jest-junit prettier projen projen-github-action-typescript projen-nvm standard-version ts-jest ts-node typedoc typescript @actions/core @actions/github @octokit/core @octokit/rest"
         },
         {
           "exec": "npx projen"

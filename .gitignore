@@ -51,3 +51,4 @@ junit.xml
 !/.eslintrc.json
 !/dist/
 !/action.yml
+!/.nvmrc

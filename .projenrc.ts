@@ -1,6 +1,7 @@
 import { Node20GitHubActionTypescriptProject } from "dkershner6-projen-github-actions";
 
 import { RunsUsing } from "projen-github-action-typescript";
+import { Nvmrc } from "projen-nvm";
 
 const MAJOR_VERSION = 2;
 
@@ -11,6 +12,7 @@ const project = new Node20GitHubActionTypescriptProject({
     devDeps: [
         "dkershner6-projen-github-actions",
         "projen-github-action-typescript",
+        "projen-nvm",
     ],
     name: "jest-coverage-commenter-action",
     description: "Comment on PRs with Jest Coverage",
@@ -61,5 +63,7 @@ const project = new Node20GitHubActionTypescriptProject({
     sampleCode: false,
     docgen: true,
 });
+
+new Nvmrc(project);
 
 project.synth();

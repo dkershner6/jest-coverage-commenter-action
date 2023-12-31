@@ -44,6 +44,7 @@
     "prettier": "^3.1.1",
     "projen": "^0.78.5",
     "projen-github-action-typescript": "^0.0.395",
+    "projen-nvm": "^0.0.39",
     "standard-version": "^9",
     "ts-jest": "^29.1.1",
     "ts-node": "^10.9.2",

@@ -76,6 +76,9 @@ devDependencies:
   projen-github-action-typescript:
     specifier: ^0.0.395
     version: 0.0.395(projen@0.78.5)
+  projen-nvm:
+    specifier: ^0.0.39
+    version: 0.0.39(constructs@10.3.0)(projen@0.78.5)
   standard-version:
     specifier: ^9
     version: 9.5.0
@@ -4295,6 +4298,17 @@ packages:
     peerDependencies:
       projen: ^0.76.15
     dependencies:
+      projen: 0.78.5(constructs@10.3.0)
+    dev: true
+
+  /projen-nvm@0.0.39(constructs@10.3.0)(projen@0.78.5):
+    resolution: {integrity: sha512-aIv0tZsMBi1N9yEC9ZfBnSmR9YgMjlmfWz2/PHu/rvVU0DF6YC4CYQsqQHvKgesyK03RWcBtF1IjlfXf3Fw8Sw==}
+    engines: {node: '>= 18.12.0 <= 20.10.0'}
+    peerDependencies:
+      constructs: ^10.3.0
+      projen: ^0.78.5
+    dependencies:
+      constructs: 10.3.0
       projen: 0.78.5(constructs@10.3.0)
     dev: true
 
