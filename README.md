@@ -33,7 +33,7 @@ jobs:
       - run: npm i
 
       - name: Comment with Test Coverage
-        uses: dkershner6/jest-coverage-commenter-action@v1
+        uses: dkershner6/jest-coverage-commenter-action@v2
         with:
           github_token: "${{ secrets.GITHUB_TOKEN }}"
           test_command: "npm run test:coverage"
@@ -49,3 +49,14 @@ For the `text-summary` reporter, you should run a jest command that includes `--
 
 ![image](https://user-images.githubusercontent.com/25798427/110061175-f8ff4500-7d1b-11eb-8241-1c1bddc72c20.png)
 
+
+## Contributing
+
+All contributions are welcome, please open an issue or pull request.
+
+To use this repository:
+1. `npm i -g pnpm` (if don't have pnpm installed)
+2. `pnpm i`
+3. `npx projen` (this will ensure everything is setup correctly, and you can run this command at any time)
+4. Good to make your changes!
+5. You can run `npx projen build` at any time to build the project.
