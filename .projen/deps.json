@@ -1,6 +1,10 @@
 {
   "dependencies": [
     {
+      "name": "@types/clone-deep",
+      "type": "build"
+    },
+    {
       "name": "@types/jest",
       "type": "build"
     },
@@ -21,6 +25,10 @@
     },
     {
       "name": "@vercel/ncc",
+      "type": "build"
+    },
+    {
+      "name": "clone-deep",
       "type": "build"
     },
     {
