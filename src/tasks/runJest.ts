@@ -1,4 +1,5 @@
 import { execSync as execSyncImport } from "child_process";
+
 import { error, warning, debug } from "@actions/core";
 
 export interface FormattedCoverage {
