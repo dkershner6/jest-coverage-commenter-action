@@ -1,5 +1,6 @@
 // eslint-disable-next-line import/no-namespace
 import * as core from "@actions/core";
+
 import runTasks from "./runTasks";
 import {
     NO_TOKEN_FAIL_MESSAGE,

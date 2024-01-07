@@ -1,4 +1,5 @@
 import { info, error, setFailed } from "@actions/core";
+
 import gatherAllInputs from "./tasks/gatherAllInputs";
 import postCommentImport from "./tasks/postComment";
 import runJest from "./tasks/runJest";

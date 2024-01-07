@@ -1,8 +1,8 @@
 /* istanbul ignore file */
 import { error, setFailed, info } from "@actions/core";
 import { getOctokit as getOctokitImport, context } from "@actions/github";
-
 import { GitHub } from "@actions/github/lib/utils";
+
 import { FormattedCoverage } from "./runJest";
 
 export type PostComment = (
