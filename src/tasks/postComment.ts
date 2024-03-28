@@ -40,8 +40,8 @@ const postComment: PostComment = async (
             owner,
         });
 
-        const existingComment = prComments?.data?.find(
-            (comment) => comment?.body?.startsWith(commentPrefix),
+        const existingComment = prComments?.data?.find((comment) =>
+            comment?.body?.startsWith(commentPrefix),
         );
 
         const commentBody = `${commentPrefix}

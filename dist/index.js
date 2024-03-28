@@ -1512,9 +1512,9 @@ exports.getOctokitOptions = exports.GitHub = exports.defaults = exports.context 
 const Context = __importStar(__nccwpck_require__(8282));
 const Utils = __importStar(__nccwpck_require__(1181));
 // octokit + plugins
-const core_1 = __nccwpck_require__(807);
-const plugin_rest_endpoint_methods_1 = __nccwpck_require__(5269);
-const plugin_paginate_rest_1 = __nccwpck_require__(9906);
+const core_1 = __nccwpck_require__(9698);
+const plugin_rest_endpoint_methods_1 = __nccwpck_require__(4726);
+const plugin_paginate_rest_1 = __nccwpck_require__(3717);
 exports.context = new Context.Context();
 const baseUrl = Utils.getApiBaseUrl();
 exports.defaults = {
@@ -2470,7 +2470,7 @@ var createTokenAuth = function createTokenAuth2(token) {
 
 /***/ }),
 
-/***/ 807:
+/***/ 9698:
 /***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 "use strict";
@@ -2506,7 +2506,7 @@ var import_graphql = __nccwpck_require__(7667);
 var import_auth_token = __nccwpck_require__(1410);
 
 // pkg/dist-src/version.js
-var VERSION = "5.0.2";
+var VERSION = "5.1.0";
 
 // pkg/dist-src/index.js
 var noop = () => {
@@ -3181,7 +3181,7 @@ function withCustomRequest(customRequest) {
 
 /***/ }),
 
-/***/ 9906:
+/***/ 3717:
 /***/ ((module) => {
 
 "use strict";
@@ -3580,7 +3580,7 @@ paginateRest.VERSION = VERSION;
 
 /***/ }),
 
-/***/ 5269:
+/***/ 4726:
 /***/ ((module) => {
 
 "use strict";
